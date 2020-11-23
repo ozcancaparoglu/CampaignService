@@ -18,7 +18,6 @@ namespace CampaignService.UnitTests
         {
             var result = await CampaignService.GetAllActiveCampaigns();
             Assert.AreEqual(50, result.Count());
-            Assert.Pass();
         }
     }
 }

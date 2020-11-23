@@ -31,6 +31,7 @@ namespace CampaignService.Services.CampaignServices
             var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true);
 
             return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList).ToList();
+            
         }
 
 
