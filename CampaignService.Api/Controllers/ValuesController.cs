@@ -1,5 +1,8 @@
-﻿using CampaignService.Services.CampaignServices;
+﻿using CampaignService.Logging;
+using CampaignService.Services.CampaignServices;
+using CampaignService.Services.ShoppingCartItemServices;
 using Microsoft.AspNetCore.Mvc;
+using NLog.Fluent;
 using System.Threading.Tasks;
 
 namespace CampaignService.Api.Controllers
@@ -9,10 +12,11 @@ namespace CampaignService.Api.Controllers
     public class ValuesController : ControllerBase
     {
         private ICampaignService campaignService;
-
-        public ValuesController(ICampaignService campaignService)
+        private IShoppingCartItemService shoppingCartItemService;
+        public ValuesController(ICampaignService campaignService, IShoppingCartItemService shoppingCartItemService)
         {
             this.campaignService = campaignService;
+            this.shoppingCartItemService = shoppingCartItemService;
         }
 
         // GET api/values
@@ -25,9 +29,10 @@ namespace CampaignService.Api.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var data = await shoppingCartItemService.GetShoppingCartItems(id);
+            return Ok(data);
         }
 
         // POST api/values
@@ -47,5 +52,6 @@ namespace CampaignService.Api.Controllers
         public void Delete(int id)
         {
         }
+
     }
 }

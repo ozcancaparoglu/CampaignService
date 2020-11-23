@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace CampaignService.Api
 {
@@ -8,10 +10,15 @@ namespace CampaignService.Api
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .UseStartup<Startup>()
+        .ConfigureLogging(logging =>
+              {
+            logging.AddNLog();
+        }).UseNLog();
     }
 }
