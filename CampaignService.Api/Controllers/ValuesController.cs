@@ -1,22 +1,24 @@
-﻿using CampaignService.Logging;
-using CampaignService.Services.CampaignServices;
+﻿using CampaignService.Services.CampaignServices;
 using CampaignService.Services.ShoppingCartItemServices;
 using Microsoft.AspNetCore.Mvc;
-using NLog.Fluent;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace CampaignService.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : Controller
     {
-        private ICampaignService campaignService;
-        private IShoppingCartItemService shoppingCartItemService;
-        public ValuesController(ICampaignService campaignService, IShoppingCartItemService shoppingCartItemService)
+        private readonly ICampaignService campaignService;
+        private readonly IShoppingCartItemService shoppingCartItemService;
+        private readonly ILogger<ValuesController> logger;
+
+        public ValuesController(ICampaignService campaignService, IShoppingCartItemService shoppingCartItemService, ILogger<ValuesController> logger)
         {
             this.campaignService = campaignService;
             this.shoppingCartItemService = shoppingCartItemService;
+            this.logger = logger;
         }
 
         // GET api/values
@@ -24,6 +26,8 @@ namespace CampaignService.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var data = await campaignService.GetAllActiveCampaigns();
+            logger.LogError("hoppala paşam");
+
             return Ok(data);
         }
 
