@@ -16,6 +16,7 @@ namespace CampaignService.Data.MapperConfiguration
             CreateMap<CampaignService_CampaignFilter, CampaignFilterModel>().MaxDepth(depth).ReverseMap();
             CreateMap<CampaignService_CampaignUsageHistory,CampaignUsageHistoryModel>().MaxDepth(depth).ReverseMap();
             CreateMap<CampaignService_Log, CampaignLogModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<Product, ProductModel>().MaxDepth(depth).ReverseMap();
         }
     }
 }

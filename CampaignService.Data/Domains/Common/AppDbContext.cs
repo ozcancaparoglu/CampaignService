@@ -46,6 +46,7 @@ namespace CampaignService.Data.Domains.Common
         public virtual DbSet<CampaignService_CampaignFilter> CampaignService_CampaignFilter { get; set; }
         public virtual DbSet<CampaignService_CampaignUsageHistory> CampaignService_CampaignUsageHistory { get; set; }
         public virtual DbSet<CampaignService_Log> CampaignService_Log { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
 
         #endregion
 
