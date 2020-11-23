@@ -30,7 +30,7 @@ namespace CampaignService.Services.CampaignServices
 
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
-            var list = new List<int> { 41, 15, 23, 45 };
+            var list = new List<int> { 41, 15, 23, 45, 55 };
             var products = await productRepo.FindAllAsync(x => list.Contains(x.Id));
 
             var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true);
