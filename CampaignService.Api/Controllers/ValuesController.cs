@@ -1,4 +1,5 @@
 ﻿using CampaignService.Services.CampaignServices;
+using CampaignService.Services.GenericAttributeServices;
 using CampaignService.Services.ShoppingCartItemServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,12 +14,14 @@ namespace CampaignService.Api.Controllers
         private readonly ICampaignService campaignService;
         private readonly IShoppingCartItemService shoppingCartItemService;
         private readonly ILogger<ValuesController> logger;
+        private readonly IGenericAttributeService genericAttributeService;
 
-        public ValuesController(ICampaignService campaignService, IShoppingCartItemService shoppingCartItemService, ILogger<ValuesController> logger)
+        public ValuesController(ICampaignService campaignService, IShoppingCartItemService shoppingCartItemService, ILogger<ValuesController> logger, IGenericAttributeService genericAttributeService)
         {
             this.campaignService = campaignService;
             this.shoppingCartItemService = shoppingCartItemService;
             this.logger = logger;
+            this.genericAttributeService = genericAttributeService;
         }
 
         // GET api/values
@@ -27,7 +30,7 @@ namespace CampaignService.Api.Controllers
         {
             var data = await campaignService.GetAllActiveCampaigns();
             logger.LogError("hoppala paşam");
-
+            var genericAttribute = await genericAttributeService.GetByEntityKey("OfferedShippingOptions", 209);
             return Ok(data);
         }
 
