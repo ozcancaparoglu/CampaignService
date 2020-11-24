@@ -36,65 +36,53 @@ namespace CampaignService.Services.CampaignServices
             return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList).ToList();
         }
 
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithCustomerMail(string email)
+        public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
+            var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email));
 
-            var customerBased = entityList.Where(x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email)).ToList();
-
-            var customerNull = entityList.Where(x => string.IsNullOrWhiteSpace(x.Customers)).ToList();
+            var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.Customers));
 
             return customerBased.Union(customerNull).ToList();
         }
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithCustomerMailDomain(string email)
+        public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
-
             string emailDomain = $"@{email.Split('@')[1]}";
 
-            var customerBased = entityList.Where(x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain)).ToList();
+            var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain));
 
-            var customerNull = entityList.Where(x => string.IsNullOrWhiteSpace(x.CorporateDomainNames)).ToList();
+            var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
 
             return customerBased.Union(customerNull).ToList();
         }
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithDeviceTypes(string deviceType)
+        public ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
+            var deviceTypeBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType));
 
-            var deviceTypeBased = entityList.Where(x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType)).ToList();
-
-            var deviceTypeNull = entityList.Where(x => string.IsNullOrWhiteSpace(x.DeviceTypes)).ToList();
+            var deviceTypeNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.DeviceTypes));
 
             return deviceTypeBased.Union(deviceTypeNull).ToList();
         }
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithInstallmentCount(int installmentCount)
+        public ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
+            var installmentCountBased = modelList.Where(x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount);
 
-            var installmentCountBased = entityList.Where(x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount).ToList();
-
-            var installmentCountNull = entityList.Where(x => x.InstallmentCount == 0).ToList();
+            var installmentCountNull = modelList.Where(x => x.InstallmentCount == 0);
 
             return installmentCountBased.Union(installmentCountNull).ToList();
         }
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithCountryId(string countryId)
+        public ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
+            var countryIdBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId));
 
-            var countryIdBased = entityList.Where(x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId)).ToList();
-
-            var countryIdNull = entityList.Where(x => string.IsNullOrWhiteSpace(x.CountryIds)).ToList();
+            var countryIdNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CountryIds));
 
             return countryIdBased.Union(countryIdNull).ToList();
         }
-        public async Task<ICollection<CampaignModel>> GetActiveCampaignsWithPickUp(bool pickUp)
+        public ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
         {
-            var entityList = await GetAllActiveCampaigns();
+            var pickUpBased = modelList.Where(x => x.PickupInStore == pickUp);
 
-            var pickUpBased = entityList.Where(x => x.PickupInStore == pickUp).ToList();
-
-            var pickUpNull = entityList.Where(x => x.PickupInStore == false).ToList();
+            var pickUpNull = modelList.Where(x => x.PickupInStore == false);
 
             return pickUpBased.Union(pickUpNull).ToList();
         }

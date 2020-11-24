@@ -21,7 +21,12 @@ namespace CampaignService.Services.FilterServices
         {
             var filteredCampaigns = await campaignService.GetAllActiveCampaigns();
 
-            filteredCampaigns = await campaignService.GetActiveCampaignsWithCustomerMail(request.Email);
+            filteredCampaigns = campaignService.GetActiveCampaignsWithCustomerMail(request.Email, filteredCampaigns);
+            filteredCampaigns = campaignService.GetActiveCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);
+            filteredCampaigns = campaignService.GetActiveCampaignsWithDeviceTypes(request.DeviceType.ToString(), filteredCampaigns);
+            filteredCampaigns = campaignService.GetActiveCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
+            filteredCampaigns = campaignService.GetActiveCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);
+
 
             return filteredCampaigns;
             
