@@ -25,7 +25,7 @@ namespace CampaignService.Services.CampaignServices
             campaignRepo = this.unitOfWork.Repository<CampaignService_Campaigns>();
         }
 
-        #region Methods
+        #region Async(Db) Methods
 
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
@@ -35,6 +35,10 @@ namespace CampaignService.Services.CampaignServices
 
             return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList).ToList();
         }
+
+        #endregion
+
+        #region Filter Methods
 
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
@@ -86,6 +90,7 @@ namespace CampaignService.Services.CampaignServices
 
             return pickUpBased.Union(pickUpNull).ToList();
         }
+
         #endregion
     }
 }
