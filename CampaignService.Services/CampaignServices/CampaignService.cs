@@ -40,13 +40,30 @@ namespace CampaignService.Services.CampaignServices
 
         #region Filter Methods
 
+        private ICollection<CampaignModel> GetActiveCampaignsWithFilters(ICollection<CampaignModel> modelList,
+            Func<CampaignModel, bool> predicate, Func<CampaignModel, bool> predicate2 = null)
+        {
+            var predicateList = modelList.Where(predicate);
+
+            if (predicate2 == null)
+                return predicateList.ToList();
+
+            var predicateList2 = modelList.Where(predicate2);
+
+            return predicateList.Union(predicateList2).ToList();
+        }
+
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
-            var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email));
+            return GetActiveCampaignsWithFilters(modelList,
+                x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email),
+                x => string.IsNullOrWhiteSpace(x.Customers));
 
-            var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.Customers));
+            //var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email));
 
-            return customerBased.Union(customerNull).ToList();
+            //var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.Customers));
+
+            //return customerBased.Union(customerNull).ToList();
         }
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
         {
