@@ -22,7 +22,12 @@ namespace CampaignService.Services.GenericAttributeServices
         }
         public async Task<GenericAttributeModel> GetByEntityKey(string key, int entityId)
         {
-            var entity = await genericAttributeRepo.FindAsync(x => x.Key == key && x.EntityId==entityId);
+            var entity = await genericAttributeRepo.FindAsync(x => x.Key == key && x.EntityId == entityId);
+            return autoMapper.MapObject<GenericAttribute, GenericAttributeModel>(entity);
+        }
+        private async Task<GenericAttributeModel> GetGenericAttributeByName(string key, int entityId, string keyGroup)
+        {
+            var entity = await genericAttributeRepo.FindAsync(x => x.EntityId == entityId && x.Key == key && x.KeyGroup == keyGroup);
             return autoMapper.MapObject<GenericAttribute, GenericAttributeModel>(entity);
         }
     }
