@@ -28,7 +28,7 @@ namespace CampaignService.Api
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
             WebHost.CreateDefaultBuilder(args).ConfigureLogging((logging) =>
             {
                 logging.ClearProviders();
