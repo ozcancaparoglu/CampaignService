@@ -11,8 +11,8 @@ namespace CampaignService.Common.Services
         /// </summary>
         /// <typeparam name="T">Type of class</typeparam>
         /// <param name="modelList">List to filter expressions</param>
-        /// <param name="predicate">First level expression</param>
-        /// <param name="predicate2">Second level expression</param>
+        /// <param name="predicate">First level of expression</param>
+        /// <param name="predicate2">Second level of expression</param>
         /// <returns></returns>
         protected ICollection<T> FilterPredication<T>(ICollection<T> modelList,
            Func<T, bool> predicate, Func<T, bool> predicate2 = null)

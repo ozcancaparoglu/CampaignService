@@ -30,7 +30,7 @@ namespace CampaignService.Services.CampaignServices
 
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
-            var now = DateTime.UtcNow;
+            DateTime now = DateTime.UtcNow;
 
             var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
 
