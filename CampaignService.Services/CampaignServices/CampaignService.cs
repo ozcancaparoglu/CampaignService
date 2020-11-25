@@ -1,4 +1,5 @@
-﻿using CampaignService.Common.Services;
+﻿using CampaignService.Common.Cache;
+using CampaignService.Common.Services;
 using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
@@ -15,13 +16,15 @@ namespace CampaignService.Services.CampaignServices
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAutoMapperConfiguration autoMapper;
+        private readonly IRedisCache redisCache;
 
         private readonly IGenericRepository<CampaignService_Campaigns> campaignRepo;
 
-        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper)
+        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
+            this.redisCache = redisCache;
 
             campaignRepo = this.unitOfWork.Repository<CampaignService_Campaigns>();
         }
@@ -34,11 +37,16 @@ namespace CampaignService.Services.CampaignServices
         /// <returns></returns>
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
-            DateTime now = DateTime.UtcNow;
+            if (!redisCache.IsCached(CacheStatics.AllActiveCampaigns))
+            {
+                DateTime now = DateTime.UtcNow;
+                var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
+                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, entityList, CacheStatics.AllActiveCampaignsCacheTime);
+            }
 
-            var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
-
-            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList).ToList();
+            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>
+                (await redisCache.GetAsync<ICollection<CampaignService_Campaigns>>(CacheStatics.AllActiveCampaigns))
+                .ToList();
         }
 
         #endregion
@@ -110,7 +118,6 @@ namespace CampaignService.Services.CampaignServices
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId),
                 x => string.IsNullOrWhiteSpace(x.CountryIds));
-
         }
 
         /// <summary>

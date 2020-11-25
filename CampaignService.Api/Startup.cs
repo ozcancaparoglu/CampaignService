@@ -29,6 +29,11 @@ namespace CampaignService.Api
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ServerConnectionString")));
 
+            services.AddDistributedRedisCache(option => {
+                option.Configuration = Configuration["RedisConfiguration:Host"];
+                option.InstanceName = Configuration["RedisConfiguration:RedisDB"];
+            });
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new IocModule());
