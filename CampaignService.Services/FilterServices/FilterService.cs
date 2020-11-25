@@ -1,6 +1,7 @@
 ﻿using CampaignService.Data.Models;
 using CampaignService.Service.Model;
 using CampaignService.Services.CampaignServices;
+using CampaignService.Services.ShippingMethodServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,14 +9,21 @@ namespace CampaignService.Services.FilterServices
 {
     public class FilterService : IFilterService
     {
+        #region Fields
         private readonly ICampaignService campaignService;
+        private readonly IShippingMethodService shippingMethodService;
+        #endregion
 
-        public FilterService(ICampaignService campaignService)
+        #region Ctor
+        public FilterService(ICampaignService campaignService, IShippingMethodService shippingMethodService)
         {
             this.campaignService = campaignService;
+            this.shippingMethodService = shippingMethodService;
         }
+        #endregion
 
         #region Methods
+
 
         public async Task<ICollection<CampaignModel>> FilteredCampaigns(CampaignRequest request)
         {
@@ -26,13 +34,11 @@ namespace CampaignService.Services.FilterServices
             filteredCampaigns = campaignService.GetActiveCampaignsWithDeviceTypes(request.DeviceType.ToString(), filteredCampaigns);
             filteredCampaigns = campaignService.GetActiveCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
             filteredCampaigns = campaignService.GetActiveCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);
-
-            //TODO: Shipping methods filter process must be done.
+            filteredCampaigns = shippingMethodService.GetActiveCampaignsWithShippingMethod(request.LastShippingOption, filteredCampaigns);
 
             return filteredCampaigns;
-            
-        }
 
+        }
 
         #endregion
 
