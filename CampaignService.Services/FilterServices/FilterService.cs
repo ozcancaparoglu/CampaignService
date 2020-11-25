@@ -27,6 +27,7 @@ namespace CampaignService.Services.FilterServices
             filteredCampaigns = campaignService.GetActiveCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
             filteredCampaigns = campaignService.GetActiveCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);
 
+            //TODO: Shipping methods filter process must be done.
 
             return filteredCampaigns;
             

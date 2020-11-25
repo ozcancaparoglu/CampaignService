@@ -21,6 +21,7 @@ namespace CampaignService.Data.MapperConfiguration
             CreateMap<ProductSpecificationAttributeMapping, ProductSpecificationAttributeMappingModel>().MaxDepth(depth).ReverseMap();
             CreateMap<ShoppingCartItem, ShoppingCartItemModel>().MaxDepth(depth).ReverseMap();
             CreateMap<GenericAttribute, GenericAttributeModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<ShippingMethod, ShippingMethodModel>().MaxDepth(depth).ReverseMap();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using CampaignService.Services.CampaignServices;
 using CampaignService.Services.Ioc;
+using CampaignService.Services.ShippingMethodServices;
 
 namespace CampaignService.UnitTests
 {
@@ -12,7 +13,7 @@ namespace CampaignService.UnitTests
         {
             get
             {
-                if (_autoFacContainer == null) 
+                if (_autoFacContainer == null)
                 {
                     var builder = new ContainerBuilder();
                     builder.RegisterModule(new IocModule());
@@ -29,6 +30,14 @@ namespace CampaignService.UnitTests
             get
             {
                 return AutoFacContainer.Resolve<ICampaignService>();
+            }
+        }
+
+        protected IShippingMethodService ShippingMethodService
+        {
+            get
+            {
+                return AutoFacContainer.Resolve<IShippingMethodService>();
             }
         }
     }
