@@ -69,43 +69,65 @@ namespace CampaignService.Services.CampaignServices
         {
             string emailDomain = $"@{email.Split('@')[1]}";
 
-            var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain));
+            return GetActiveCampaignsWithFilters(modelList,
+                x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain),
+                x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
 
-            var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
+            //var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain));
 
-            return customerBased.Union(customerNull).ToList();
+            //var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
+
+            //return customerBased.Union(customerNull).ToList();
         }
         public ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
         {
-            var deviceTypeBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType));
 
-            var deviceTypeNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.DeviceTypes));
+            return GetActiveCampaignsWithFilters(modelList,
+                x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType),
+                x => string.IsNullOrWhiteSpace(x.DeviceTypes));
 
-            return deviceTypeBased.Union(deviceTypeNull).ToList();
+            //var deviceTypeBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType));
+
+            //var deviceTypeNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.DeviceTypes));
+
+            //return deviceTypeBased.Union(deviceTypeNull).ToList();
         }
         public ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
         {
-            var installmentCountBased = modelList.Where(x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount);
+            return GetActiveCampaignsWithFilters(modelList,
+                x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount,
+                x => x.InstallmentCount == 0);
 
-            var installmentCountNull = modelList.Where(x => x.InstallmentCount == 0);
+            //var installmentCountBased = modelList.Where(x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount);
 
-            return installmentCountBased.Union(installmentCountNull).ToList();
+            //var installmentCountNull = modelList.Where(x => x.InstallmentCount == 0);
+
+            //return installmentCountBased.Union(installmentCountNull).ToList();
         }
         public ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
         {
-            var countryIdBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId));
+            return GetActiveCampaignsWithFilters(modelList,
+                x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId),
+                x => string.IsNullOrWhiteSpace(x.CountryIds));
 
-            var countryIdNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CountryIds));
+            //var countryIdBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId));
 
-            return countryIdBased.Union(countryIdNull).ToList();
+            //var countryIdNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CountryIds));
+
+            //return countryIdBased.Union(countryIdNull).ToList();
         }
         public ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
         {
-            var pickUpBased = modelList.Where(x => x.PickupInStore == pickUp);
 
-            var pickUpNull = modelList.Where(x => x.PickupInStore == false);
+            return GetActiveCampaignsWithFilters(modelList,
+                x => x.PickupInStore == pickUp,
+                x => x.PickupInStore == false);
 
-            return pickUpBased.Union(pickUpNull).ToList();
+            //var pickUpBased = modelList.Where(x => x.PickupInStore == pickUp);
+
+            //var pickUpNull = modelList.Where(x => x.PickupInStore == false);
+
+            //return pickUpBased.Union(pickUpNull).ToList();
         }
 
         #endregion
