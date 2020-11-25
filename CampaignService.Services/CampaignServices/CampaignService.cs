@@ -28,6 +28,10 @@ namespace CampaignService.Services.CampaignServices
 
         #region Async(Db) Methods
 
+        /// <summary>
+        /// Gets all active and valid campaigns
+        /// </summary>
+        /// <returns></returns>
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
             DateTime now = DateTime.UtcNow;
@@ -41,12 +45,25 @@ namespace CampaignService.Services.CampaignServices
 
         #region Filter Methods
 
+        /// <summary>
+        /// Active campaigns that can be benefited filter by customer email address
+        /// </summary>
+        /// <param name="email">Customer email</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email),
                 x => string.IsNullOrWhiteSpace(x.Customers));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by domain email address
+        /// </summary>
+        /// <param name="email">Customer email domain</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
         {
             string emailDomain = $"@{email.Split('@')[1]}";
@@ -55,19 +72,39 @@ namespace CampaignService.Services.CampaignServices
                 x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain),
                 x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by device type
+        /// </summary>
+        /// <param name="deviceType">Device type</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
         {
-
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType),
                 x => string.IsNullOrWhiteSpace(x.DeviceTypes));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by installment count
+        /// </summary>
+        /// <param name="installmentCount">Installment count</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount,
                 x => x.InstallmentCount == 0);
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by country
+        /// </summary>
+        /// <param name="countryId">Country id</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
@@ -75,6 +112,13 @@ namespace CampaignService.Services.CampaignServices
                 x => string.IsNullOrWhiteSpace(x.CountryIds));
 
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by pick-up (mağazadan teslimat)
+        /// </summary>
+        /// <param name="pickUp">Pickup</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,

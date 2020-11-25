@@ -15,7 +15,9 @@ namespace CampaignService.Services.ShippingMethodServices
         #region Fields
         private readonly IUnitOfWork unitOfWork;
         private readonly IAutoMapperConfiguration autoMapper;
+
         private readonly IGenericRepository<ShippingMethod> shippingMethodRepo;
+        
         #endregion
 
         #region Ctor
@@ -23,6 +25,7 @@ namespace CampaignService.Services.ShippingMethodServices
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
+
             shippingMethodRepo = this.unitOfWork.Repository<ShippingMethod>();
         }
         #endregion
@@ -37,6 +40,7 @@ namespace CampaignService.Services.ShippingMethodServices
         #endregion
 
         #region FilterMethods
+
         public ICollection<CampaignModel> GetActiveCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
