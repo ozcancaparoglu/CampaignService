@@ -1,19 +1,16 @@
-﻿using CampaignService.Data.Domains;
+﻿using CampaignService.Common.Services;
+using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
 using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace CampaignService.Services.ShippingMethodServices
 {
-    public class ShippingMethodService : IShippingMethodService
+    public class ShippingMethodService : CommonService, IShippingMethodService
     {
         #region Fields
         private readonly IUnitOfWork unitOfWork;
@@ -42,11 +39,9 @@ namespace CampaignService.Services.ShippingMethodServices
         #region FilterMethods
         public ICollection<CampaignModel> GetActiveCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList)
         {
-            var shippingMethodBase = modelList.Where(x => !string.IsNullOrWhiteSpace(x.SelectedShipmentMethod) && x.SelectedShipmentMethod.Contains(lastShippingOption));
-
-            var shippingMethodNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.SelectedShipmentMethod));
-
-            return shippingMethodBase.Union(shippingMethodNull).ToList();
+            return FilterPredication(modelList,
+                x => !string.IsNullOrWhiteSpace(x.SelectedShipmentMethod) && x.SelectedShipmentMethod.Contains(lastShippingOption),
+                x => string.IsNullOrWhiteSpace(x.SelectedShipmentMethod));
         }
 
         #endregion

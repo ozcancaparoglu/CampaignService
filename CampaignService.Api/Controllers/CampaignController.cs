@@ -1,4 +1,4 @@
-﻿using CampaignService.Service.Model;
+﻿using CampaignService.Common.Models;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

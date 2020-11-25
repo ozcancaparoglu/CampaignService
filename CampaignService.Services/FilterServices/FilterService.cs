@@ -1,5 +1,5 @@
-﻿using CampaignService.Data.Models;
-using CampaignService.Service.Model;
+﻿using CampaignService.Common.Models;
+using CampaignService.Data.Models;
 using CampaignService.Services.CampaignServices;
 using CampaignService.Services.ShippingMethodServices;
 using System.Collections.Generic;
