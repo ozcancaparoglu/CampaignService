@@ -1,6 +1,5 @@
 ﻿using CampaignService.Common.Models;
 using CampaignService.Logging;
-using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,7 @@ namespace CampaignService.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CampaignController : Controller
+    public class CampaignController : ControllerBase
     {
         //private readonly ILogger<CampaignController> logger;
         private readonly IFilterService filterService;
@@ -31,7 +30,11 @@ namespace CampaignService.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            CampaignRequest campaignRequest = new CampaignRequest();
+            CampaignRequest campaignRequest = new CampaignRequest() 
+            {
+                Email = "semaimer34@gmail.com",
+                CustomerId = 19496140
+            };
             LogRequestModel logRequestModel  = new LogRequestModel()
             {
                 Message = "generic",

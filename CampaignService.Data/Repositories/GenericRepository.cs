@@ -24,7 +24,7 @@ namespace CampaignService.Repositories
 
         public virtual int ExecuteSqlCommand(string sql, params object[] parameters)
         {
-            return context.Database.ExecuteSqlCommand(sql, parameters);
+            return context.Database.ExecuteSqlRaw(sql, parameters);
         }
 
         public virtual IQueryable<T> Table()
