@@ -51,6 +51,7 @@ namespace CampaignService.Data.Domains.Common
         public virtual DbSet<ProductSpecificationAttributeMapping> ProductSpecificationAttributeMapping { get; set; }
         public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public virtual DbSet<GenericAttribute> GenericAttribute { get; set; }
+        public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
 
         #endregion
 

@@ -3,9 +3,9 @@
     public class CacheStatics
     {
         /// <summary>
-        ///  Invoice Cache 
+        /// All Active Campaigns
         /// </summary>
-        public static string InvoiceCacheKey = "invoicelist";
-        public static int InvoiceCacheTime = 60;
+        public static string AllActiveCampaigns = "allActiveCampaigns";
+        public static int AllActiveCampaignsCacheTime = 120;
     }
 }

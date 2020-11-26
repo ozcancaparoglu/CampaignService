@@ -19,5 +19,12 @@ namespace CampaignService.UnitTests
             var result = await CampaignService.GetAllActiveCampaigns();
             Assert.AreEqual(50, result.Count());
         }
+
+        [Test]
+        public async Task ActiveShippingMethods()
+        {
+            var result = await ShippingMethodService.GetShippingMethods();
+            Assert.AreEqual(2, result.Count());
+        }
     }
 }

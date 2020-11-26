@@ -1,5 +1,5 @@
-﻿using CampaignService.Data.Models;
-using CampaignService.Service.Model;
+﻿using CampaignService.Common.Models;
+using CampaignService.Data.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

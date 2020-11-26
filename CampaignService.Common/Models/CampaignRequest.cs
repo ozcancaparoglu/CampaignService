@@ -1,4 +1,6 @@
-﻿namespace CampaignService.Service.Model
+﻿using CampaignService.Common.Enums;
+
+namespace CampaignService.Common.Models
 {
     public class CampaignRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace CampaignService.Service.Model
+﻿namespace CampaignService.Common.Enums
 {
     public enum DeviceTypes
     {

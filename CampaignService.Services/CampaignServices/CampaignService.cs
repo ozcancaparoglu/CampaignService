@@ -1,4 +1,6 @@
-﻿using CampaignService.Data.Domains;
+﻿using CampaignService.Common.Cache;
+using CampaignService.Common.Services;
+using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
 using CampaignService.Repositories;
@@ -10,103 +12,148 @@ using System.Threading.Tasks;
 
 namespace CampaignService.Services.CampaignServices
 {
-    public class CampaignService : ICampaignService
+    public class CampaignService : CommonService, ICampaignService
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAutoMapperConfiguration autoMapper;
+        private readonly IRedisCache redisCache;
 
         private readonly IGenericRepository<CampaignService_Campaigns> campaignRepo;
 
-        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper)
+        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
+            this.redisCache = redisCache;
 
             campaignRepo = this.unitOfWork.Repository<CampaignService_Campaigns>();
         }
 
         #region Async(Db) Methods
 
+        /// <summary>
+        /// Gets all active and valid campaigns
+        /// </summary>
+        /// <returns></returns>
         public async Task<ICollection<CampaignModel>> GetAllActiveCampaigns()
         {
-            var now = DateTime.UtcNow;
+            if (!redisCache.IsCached(CacheStatics.AllActiveCampaigns))
+            {
+                DateTime now = DateTime.UtcNow;
+                var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
+                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, entityList, CacheStatics.AllActiveCampaignsCacheTime);
+            }
 
-            var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
-
-            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList).ToList();
+            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>
+                (await redisCache.GetAsync<ICollection<CampaignService_Campaigns>>(CacheStatics.AllActiveCampaigns))
+                .ToList();
         }
 
         #endregion
 
         #region Filter Methods
 
-        private ICollection<CampaignModel> GetActiveCampaignsWithFilters(ICollection<CampaignModel> modelList,
-            Func<CampaignModel, bool> predicate, Func<CampaignModel, bool> predicate2 = null)
-        {
-            var predicateList = modelList.Where(predicate);
-
-            if (predicate2 == null)
-                return predicateList.ToList();
-
-            var predicateList2 = modelList.Where(predicate2);
-
-            return predicateList.Union(predicateList2).ToList();
-        }
-
+        /// <summary>
+        /// Active campaigns that can be benefited filter by customer email address
+        /// </summary>
+        /// <param name="email">Customer email</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
-            return GetActiveCampaignsWithFilters(modelList,
+            return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email),
                 x => string.IsNullOrWhiteSpace(x.Customers));
-
-            //var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email));
-
-            //var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.Customers));
-
-            //return customerBased.Union(customerNull).ToList();
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by domain email address
+        /// </summary>
+        /// <param name="email">Customer email domain</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
         {
             string emailDomain = $"@{email.Split('@')[1]}";
 
-            var customerBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain));
-
-            var customerNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
-
-            return customerBased.Union(customerNull).ToList();
+            return FilterPredication(modelList,
+                x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain),
+                x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by device type
+        /// </summary>
+        /// <param name="deviceType">Device type</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
         {
-            var deviceTypeBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType));
-
-            var deviceTypeNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.DeviceTypes));
-
-            return deviceTypeBased.Union(deviceTypeNull).ToList();
+            return FilterPredication(modelList,
+                x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType),
+                x => string.IsNullOrWhiteSpace(x.DeviceTypes));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by installment count
+        /// </summary>
+        /// <param name="installmentCount">Installment count</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
         {
-            var installmentCountBased = modelList.Where(x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount);
-
-            var installmentCountNull = modelList.Where(x => x.InstallmentCount == 0);
-
-            return installmentCountBased.Union(installmentCountNull).ToList();
+            return FilterPredication(modelList,
+                x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount,
+                x => x.InstallmentCount == 0);
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by country
+        /// </summary>
+        /// <param name="countryId">Country id</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
         {
-            var countryIdBased = modelList.Where(x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId));
-
-            var countryIdNull = modelList.Where(x => string.IsNullOrWhiteSpace(x.CountryIds));
-
-            return countryIdBased.Union(countryIdNull).ToList();
+            return FilterPredication(modelList,
+                x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId),
+                x => string.IsNullOrWhiteSpace(x.CountryIds));
         }
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by pick-up (mağazadan teslimat)
+        /// </summary>
+        /// <param name="pickUp">Pickup</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
         {
-            var pickUpBased = modelList.Where(x => x.PickupInStore == pickUp);
-
-            var pickUpNull = modelList.Where(x => x.PickupInStore == false);
-
-            return pickUpBased.Union(pickUpNull).ToList();
+            return FilterPredication(modelList,
+                x => x.PickupInStore == pickUp,
+                x => x.PickupInStore == false);
         }
+        
+        public ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.SelectedPaymentBankNames == bankName,
+                x => string.IsNullOrWhiteSpace(x.SelectedPaymentBankNames));
+        }
+        
+        public ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.SelectedPaymentCreditCartBankNames == cartbankName,
+                x => string.IsNullOrWhiteSpace(x.SelectedPaymentCreditCartBankNames));
+        }
+
+        public ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.PaymentMethodSystemNames == paymentMethodSystemName,
+                x => string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames));
+        }
+
 
         #endregion
     }
