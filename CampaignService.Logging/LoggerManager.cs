@@ -10,6 +10,11 @@ namespace CampaignService.Logging
         {
             Logger logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
+            /// <summary>
+            /// write nlog at debug log level
+            /// </summary>
+            /// <param name="logModelRequest">LogRequestModel</param>
+            /// <returns></returns>
             public void LogDebug(LogRequestModel logModelRequest)
             {
                 logger.WithProperty("EntityType", logModelRequest.EntityType)
@@ -18,6 +23,11 @@ namespace CampaignService.Logging
                .Debug(logModelRequest.Message);
             }
 
+            /// <summary>
+            /// write nlog at debug log Error
+            /// </summary>
+            /// <param name="logModelRequest">LogRequestModel</param>
+            /// <returns></returns>
             public void LogError(LogRequestModel logModelRequest)
             {
                 logger.WithProperty("EntityType", logModelRequest.EntityType)
@@ -26,6 +36,11 @@ namespace CampaignService.Logging
                .Error(logModelRequest.Message);
             }
 
+            /// <summary>
+            /// write nlog at debug log Info
+            /// </summary>
+            /// <param name="logModelRequest">LogRequestModel</param>
+            /// <returns></returns>
             public void LogInfo(LogRequestModel logModelRequest)
             {
                 logger.WithProperty("EntityType", logModelRequest.EntityType)

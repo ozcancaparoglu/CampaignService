@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using CampaignService.Data.Domains.Common;
 using CampaignService.Logging;
+using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Services.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
