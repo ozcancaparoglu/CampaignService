@@ -1,12 +1,7 @@
-﻿using CampaignService.Logging.CampaignService.Logging;
-using CampaignService.Common.Models;
+﻿using CampaignService.Common.Models;
 using CampaignService.Logging;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CampaignService.Api.Controllers

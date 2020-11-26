@@ -4,7 +4,6 @@ using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
 using CampaignService.Logging;
-using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System;
