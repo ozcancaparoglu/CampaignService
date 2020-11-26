@@ -1,13 +1,9 @@
-﻿using CampaignService.Common.Enums;
+﻿using CampaignService.Common.Models;
 using CampaignService.Logging;
 using CampaignService.Logging.CampaignService.Logging;
-using CampaignService.Service.Model;
-using CampaignService.Common.Models;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Fluent;
 using System;
 using System.Collections;
 using System.Collections.Generic;
