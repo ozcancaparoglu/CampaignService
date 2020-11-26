@@ -8,17 +8,22 @@ namespace CampaignService.Logging
     {
         public class LoggerManager : ILoggerManager
         {
-            //private static ILoggerB loggera = LogManager.GetCurrentClassLogger();
-            Logger logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            Logger logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
-            public void LogDebug(string message)
+            public void LogDebug(LogRequestModel logModelRequest)
             {
-                logger.Debug(message);
+                logger.WithProperty("EntityType", logModelRequest.EntityType)
+                   .WithProperty("EntityId", logModelRequest.EntityId)
+                   .WithProperty("ProcessBy", logModelRequest.ProcessBy)
+               .Debug(logModelRequest.Message);
             }
 
-            public void LogError(string message)
+            public void LogError(LogRequestModel logModelRequest)
             {
-                logger.Error(message);
+                logger.WithProperty("EntityType", logModelRequest.EntityType)
+                   .WithProperty("EntityId", logModelRequest.EntityId)
+                   .WithProperty("ProcessBy", logModelRequest.ProcessBy)
+               .Error(logModelRequest.Message);
             }
 
             public void LogInfo(LogRequestModel logModelRequest)
@@ -28,9 +33,6 @@ namespace CampaignService.Logging
                     .WithProperty("ProcessBy", logModelRequest.ProcessBy)
                 .Info(logModelRequest.Message);
             }
-
-
         }
     }
-
 }

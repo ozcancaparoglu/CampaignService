@@ -3,6 +3,8 @@ using CampaignService.Common.Services;
 using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
+using CampaignService.Logging;
+using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System;
@@ -17,15 +19,17 @@ namespace CampaignService.Services.CampaignServices
         private readonly IUnitOfWork unitOfWork;
         private readonly IAutoMapperConfiguration autoMapper;
         private readonly IRedisCache redisCache;
+        private readonly ILoggerManager loggerManager;
+
 
         private readonly IGenericRepository<CampaignService_Campaigns> campaignRepo;
 
-        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache)
+        public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
             this.redisCache = redisCache;
-
+            this.loggerManager = loggerManager;
             campaignRepo = this.unitOfWork.Repository<CampaignService_Campaigns>();
         }
 
@@ -61,6 +65,11 @@ namespace CampaignService.Services.CampaignServices
         /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
+            LogRequestModel logRequestModel = new LogRequestModel()
+            {
+                EntityType = "GetActiveCampaignsWithCustomerMail"
+            };
+            loggerManager.LogInfo(logRequestModel);
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains(email),
                 x => string.IsNullOrWhiteSpace(x.Customers));

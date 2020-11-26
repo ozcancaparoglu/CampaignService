@@ -2,8 +2,8 @@
 {
     public interface ILoggerManager
     {
-        void LogDebug(string message);
-        void LogError(string message);
+        void LogDebug(LogRequestModel logModelRequest);
+        void LogError(LogRequestModel logModelRequest);
         void LogInfo(LogRequestModel logModelRequest);
     }
 }

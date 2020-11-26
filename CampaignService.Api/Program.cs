@@ -12,26 +12,10 @@ namespace CampaignService.Api
     {
         public static void Main(string[] args)
         {
-            //var logger = NLog.Web.NLogBuilder.ConfigureNLog("Nlog.config").GetCurrentClassLogger();
-            //try
-            //{
-                //logger.WithProperty("EntityType", "deneme")
-                //    .Info("Farklı bir versiyon");
-                //logger.Info("Deniyoruz");
-                CreateWebHostBuilder(args).Build().Run();
-            //}
-            //catch (Exception exception)
-            //{
-            //    logger.Error(exception, "Stopped program because of exception");
-            //    throw;
-            //}
-            //finally
-            //{
-            //    NLog.LogManager.Shutdown();
-            //}
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args).ConfigureLogging((logging) =>
             {
                 logging.ClearProviders();

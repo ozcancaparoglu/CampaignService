@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CampaignService.Data\CampaignService.Data.csproj" />
+    <ProjectReference Include="..\CampaignService.Logging\CampaignService.Logging.csproj" />
   </ItemGroup>
 
 </Project>
