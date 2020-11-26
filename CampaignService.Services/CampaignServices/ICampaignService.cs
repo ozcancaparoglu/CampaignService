@@ -41,7 +41,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList);
-
+        
         /// <summary>
         /// Active campaigns that can be benefited filter by device type
         /// </summary>
@@ -65,7 +65,10 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList);
-        
+        ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> filteredCampaigns);
+        ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList);
+
         #endregion
 
     }

@@ -132,6 +132,28 @@ namespace CampaignService.Services.CampaignServices
                 x => x.PickupInStore == pickUp,
                 x => x.PickupInStore == false);
         }
+        
+        public ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.SelectedPaymentBankNames == bankName,
+                x => string.IsNullOrWhiteSpace(x.SelectedPaymentBankNames));
+        }
+        
+        public ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.SelectedPaymentCreditCartBankNames == cartbankName,
+                x => string.IsNullOrWhiteSpace(x.SelectedPaymentCreditCartBankNames));
+        }
+
+        public ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
+        {
+            return FilterPredication(modelList,
+                x => x.PaymentMethodSystemNames == paymentMethodSystemName,
+                x => string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames));
+        }
+
 
         #endregion
     }

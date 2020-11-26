@@ -40,6 +40,12 @@ namespace CampaignService.Services.FilterServices
 
             filteredCampaigns = shippingMethodService.GetActiveCampaignsWithShippingMethod(request.LastShippingOption, filteredCampaigns);
 
+            filteredCampaigns = campaignService.GetActiveCampaignsWithBankName(request.BankName, filteredCampaigns);
+
+            filteredCampaigns = campaignService.GetActiveCampaignsWithCreditCartBankName(request.CardBankName, filteredCampaigns);
+
+            filteredCampaigns = campaignService.GetActiveCampaignsWithPaymentMethodSystemName(request.PaymentMethodSystemName, filteredCampaigns);
+
             return filteredCampaigns;
 
         }
