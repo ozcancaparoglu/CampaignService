@@ -13,11 +13,12 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.5" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CampaignService.Logging\CampaignService.Logging.csproj" />
     <ProjectReference Include="..\CampaignService.Services\CampaignService.Services.csproj" />
   </ItemGroup>
 

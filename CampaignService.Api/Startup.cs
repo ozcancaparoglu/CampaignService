@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CampaignService.Data.Domains.Common;
+using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Services.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,7 @@ namespace CampaignService.Api
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new IocModule());
+            builder.RegisterType<LoggerManager>().As<ILoggerManager>().InstancePerLifetimeScope();
             var container = builder.Build();
 
             return new AutofacServiceProvider(container);
