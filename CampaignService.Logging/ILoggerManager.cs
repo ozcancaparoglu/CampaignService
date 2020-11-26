@@ -1,4 +1,4 @@
-﻿namespace CampaignService.Logging.CampaignService.Logging
+﻿namespace CampaignService.Logging
 {
     public interface ILoggerManager
     {

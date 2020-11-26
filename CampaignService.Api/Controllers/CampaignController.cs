@@ -1,6 +1,6 @@
-﻿using CampaignService.Logging;
-using CampaignService.Logging.CampaignService.Logging;
+﻿using CampaignService.Logging.CampaignService.Logging;
 using CampaignService.Common.Models;
+using CampaignService.Logging;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +13,7 @@ namespace CampaignService.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CampaignController : Controller
+    public class CampaignController : ControllerBase
     {
         private readonly IFilterService filterService;
         private readonly ILoggerManager loggerManager;

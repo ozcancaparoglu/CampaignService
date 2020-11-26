@@ -65,8 +65,29 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList);
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by bankname
+        /// </summary>
+        /// <param name="bankName">Bank name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> filteredCampaigns);
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by credit card bankname
+        /// </summary>
+        /// <param name="cartbankName">Credit card bankname</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList);
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by payment method
+        /// </summary>
+        /// <param name="paymentMethodSystemName">Payment method system name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList);
 
         #endregion

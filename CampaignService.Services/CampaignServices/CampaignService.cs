@@ -141,14 +141,26 @@ namespace CampaignService.Services.CampaignServices
                 x => x.PickupInStore == pickUp,
                 x => x.PickupInStore == false);
         }
-        
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by bankname
+        /// </summary>
+        /// <param name="bankName">Bank name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.SelectedPaymentBankNames == bankName,
                 x => string.IsNullOrWhiteSpace(x.SelectedPaymentBankNames));
         }
-        
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by credit card bankname
+        /// </summary>
+        /// <param name="cartbankName">Credit card bankname</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
@@ -156,6 +168,12 @@ namespace CampaignService.Services.CampaignServices
                 x => string.IsNullOrWhiteSpace(x.SelectedPaymentCreditCartBankNames));
         }
 
+        /// <summary>
+        /// Active campaigns that can be benefited filter by payment method
+        /// </summary>
+        /// <param name="paymentMethodSystemName">Payment method system name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         public ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,

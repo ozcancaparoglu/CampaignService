@@ -7,7 +7,7 @@ namespace CampaignService.Common.Cache
 {
     public class RedisCache : IRedisCache
     {
-        private IDistributedCache cache;
+        private readonly IDistributedCache cache;
 
         public RedisCache(IDistributedCache cache)
         {

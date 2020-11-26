@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog.Fluent;
 using NLog.Web;
-using System;
 
 namespace CampaignService.Api
 {

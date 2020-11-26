@@ -1,15 +1,13 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CampaignService.Data.Domains.Common;
-using CampaignService.Logging.CampaignService.Logging;
+using CampaignService.Logging;
 using CampaignService.Services.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NLog;
 using System;
 
 namespace CampaignService.Api
@@ -26,7 +24,7 @@ namespace CampaignService.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ServerConnectionString")));
 
@@ -34,6 +32,9 @@ namespace CampaignService.Api
                 option.Configuration = Configuration["RedisConfiguration:Host"];
                 option.InstanceName = Configuration["RedisConfiguration:RedisDB"];
             });
+
+            services.AddControllers();
+            services.AddRazorPages();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -43,17 +44,17 @@ namespace CampaignService.Api
 
             return new AutofacServiceProvider(container);
 
+           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseRouting();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); endpoints.MapControllers(); });
+
             app.UseHttpsRedirection();
         }
     }
