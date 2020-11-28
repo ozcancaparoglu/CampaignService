@@ -24,7 +24,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="countryId">Country id</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList);
         
         /// <summary>
         /// Active campaigns that can be benefited filter by customer email address
@@ -32,7 +32,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="email">Customer email</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by domain email address
@@ -40,7 +40,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="email">Customer email domain</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList);
         
         /// <summary>
         /// Active campaigns that can be benefited filter by device type
@@ -48,7 +48,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="deviceType">Device type</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by installment count
@@ -56,7 +56,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="installmentCount">Installment count</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by pick-up (mağazadan teslimat)
@@ -64,7 +64,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="pickUp">Pickup</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by bankname
@@ -72,7 +72,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="bankName">Bank name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> filteredCampaigns);
+        ICollection<CampaignModel> FilterCampaignsWithBankName(string bankName, ICollection<CampaignModel> filteredCampaigns);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by credit card bankname
@@ -80,7 +80,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="cartbankName">Credit card bankname</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by payment method
@@ -88,7 +88,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="paymentMethodSystemName">Payment method system name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList);
 
         #endregion
 

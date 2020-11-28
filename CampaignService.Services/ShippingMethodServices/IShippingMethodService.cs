@@ -12,7 +12,7 @@ namespace CampaignService.Services.ShippingMethodServices
         /// <param name="lastShippingOption"></param>
         /// <param name="modelList"></param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Returns shipping methods

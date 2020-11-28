@@ -62,7 +62,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="email">Customer email</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithCustomerMail(string email, ICollection<CampaignModel> modelList)
         {
             LogRequestModel logRequestModel = new LogRequestModel()
             {
@@ -80,12 +80,12 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="email">Customer email domain</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList)
         {
             string emailDomain = $"@{email.Split('@')[1]}";
 
             return FilterPredication(modelList,
-                x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain),
+                x => !string.IsNullOrWhiteSpace(x.CorporateDomainNames) && x.CorporateDomainNames.Contains(emailDomain) && x.IsValidForCorporateCustomers,
                 x => string.IsNullOrWhiteSpace(x.CorporateDomainNames));
         }
 
@@ -95,7 +95,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="deviceType">Device type</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithDeviceTypes(string deviceType, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.DeviceTypes) && x.DeviceTypes.Contains(deviceType),
@@ -108,7 +108,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="installmentCount">Installment count</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithInstallmentCount(int installmentCount, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.InstallmentCount > 0 && x.InstallmentCount == installmentCount,
@@ -121,7 +121,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="countryId">Country id</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithCountryId(string countryId, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.CountryIds) && x.CountryIds.Contains(countryId),
@@ -134,7 +134,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="pickUp">Pickup</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithPickUp(bool pickUp, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.PickupInStore == pickUp,
@@ -147,7 +147,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="bankName">Bank name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.SelectedPaymentBankNames == bankName,
@@ -160,7 +160,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="cartbankName">Credit card bankname</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.SelectedPaymentCreditCartBankNames == cartbankName,
@@ -173,13 +173,12 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="paymentMethodSystemName">Payment method system name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        public ICollection<CampaignModel> GetActiveCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => x.PaymentMethodSystemNames == paymentMethodSystemName,
                 x => string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames));
         }
-
 
         #endregion
     }

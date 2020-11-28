@@ -31,6 +31,7 @@ namespace CampaignService.Services.ShippingMethodServices
         #endregion
 
         #region Methods
+
         public async Task<ICollection<ShippingMethodModel>> GetShippingMethods()
         {
             var entityList = await shippingMethodRepo.GetAllAsync();
@@ -41,7 +42,7 @@ namespace CampaignService.Services.ShippingMethodServices
 
         #region FilterMethods
 
-        public ICollection<CampaignModel> GetActiveCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList)
+        public ICollection<CampaignModel> FilterCampaignsWithShippingMethod(string lastShippingOption, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
                 x => !string.IsNullOrWhiteSpace(x.SelectedShipmentMethod) && x.SelectedShipmentMethod.Contains(lastShippingOption),
