@@ -6,7 +6,7 @@ namespace CampaignService.Services.CampaignServices
 {
     public interface ICampaignService
     {
-        #region Async(Db) Methods
+        #region Db Methods
         
         /// <summary>
         /// Gets all active and valid campaigns

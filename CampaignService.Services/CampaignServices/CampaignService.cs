@@ -20,7 +20,6 @@ namespace CampaignService.Services.CampaignServices
         private readonly IRedisCache redisCache;
         private readonly ILoggerManager loggerManager;
 
-
         private readonly IGenericRepository<CampaignService_Campaigns> campaignRepo;
 
         public CampaignService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager)
@@ -32,7 +31,7 @@ namespace CampaignService.Services.CampaignServices
             campaignRepo = this.unitOfWork.Repository<CampaignService_Campaigns>();
         }
 
-        #region Async(Db) Methods
+        #region Db Methods
 
         /// <summary>
         /// Gets all active and valid campaigns
