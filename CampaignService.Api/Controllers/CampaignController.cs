@@ -23,10 +23,12 @@ namespace CampaignService.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            int[] roleIds = { 1,3 };
             var campaignRequest = new CampaignRequest
             {
                 CustomerId = 19496140,
-                Email = "semaimer34@gmail.com"
+                Email = "semaimer34@gmail.com",
+                CustomerRoleIds = roleIds
             };
             var filteredCampaigns = await filterService.FilteredCampaigns(campaignRequest);
 
