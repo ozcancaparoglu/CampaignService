@@ -5,6 +5,7 @@ using CampaignService.Services.CampaignServices;
 using CampaignService.Services.ShippingMethodServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace CampaignService.Services.FilterServices
 {
@@ -32,6 +33,9 @@ namespace CampaignService.Services.FilterServices
         public async Task<ICollection<CampaignModel>> FilteredCampaigns(CampaignRequest request)
         {
             var filteredCampaigns = await campaignService.GetAllActiveCampaigns();
+            filteredCampaigns = campaignService.GetActiveCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
+
+            filteredCampaigns = campaignService.GetActiveCampaignsExclCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
 
             filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
 

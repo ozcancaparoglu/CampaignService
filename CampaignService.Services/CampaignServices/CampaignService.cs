@@ -149,7 +149,7 @@ namespace CampaignService.Services.CampaignServices
         public ICollection<CampaignModel> FilterCampaignsWithBankName(string bankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
-                x => x.SelectedPaymentBankNames == bankName,
+                x => !string.IsNullOrWhiteSpace(x.SelectedPaymentBankNames) && x.SelectedPaymentBankNames == bankName,
                 x => string.IsNullOrWhiteSpace(x.SelectedPaymentBankNames));
         }
 
@@ -162,7 +162,7 @@ namespace CampaignService.Services.CampaignServices
         public ICollection<CampaignModel> FilterCampaignsWithCreditCartBankName(string cartbankName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
-                x => x.SelectedPaymentCreditCartBankNames == cartbankName,
+                x => !string.IsNullOrWhiteSpace(x.SelectedPaymentCreditCartBankNames) && x.SelectedPaymentCreditCartBankNames == cartbankName,
                 x => string.IsNullOrWhiteSpace(x.SelectedPaymentCreditCartBankNames));
         }
 
@@ -175,8 +175,30 @@ namespace CampaignService.Services.CampaignServices
         public ICollection<CampaignModel> FilterCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList)
         {
             return FilterPredication(modelList,
-                x => x.PaymentMethodSystemNames == paymentMethodSystemName,
+                x => !string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames) && x.PaymentMethodSystemNames == paymentMethodSystemName,
                 x => string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames));
+        }
+        /// <summary>
+        /// Active campaigns that can be benefited filter by roleIds
+        /// </summary>
+        /// <param name="roleIds">Payment method system name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
+        public ICollection<CampaignModel> GetActiveCampaignsWithCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList)
+        {         
+            //TODO  
+            return modelList;
+        }
+        /// <summary>
+        /// Active campaigns that can be benefited filter by roleIds
+        /// </summary>
+        /// <param name="roleIds">Payment method system name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
+        public ICollection<CampaignModel> GetActiveCampaignsExclCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList)
+        {
+            //TODO
+            return modelList;
         }
 
         #endregion
