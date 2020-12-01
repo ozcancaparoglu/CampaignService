@@ -6,6 +6,15 @@ namespace CampaignService.Services.GenericAttributeServices
 {
     public interface IGenericAttributeService
     {
+        #region Db Methods
+
+        /// <summary>
+        /// Gets Generic Attribute with model.
+        /// </summary>
+        /// <param name="model">Generic attribute model</param>
+        /// <returns>List of Generic Attributes</returns>
         Task<ICollection<GenericAttributeModel>> GetGenericAttribute(GenericAttributeModel model);
+
+        #endregion
     }
 }

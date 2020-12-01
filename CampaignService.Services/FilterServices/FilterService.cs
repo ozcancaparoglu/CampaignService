@@ -1,5 +1,6 @@
 ﻿using CampaignService.Common.Models;
 using CampaignService.Data.Models;
+using CampaignService.Services.CampaignFilterServices;
 using CampaignService.Services.CampaignServices;
 using CampaignService.Services.ShippingMethodServices;
 using System.Collections.Generic;
@@ -12,13 +13,17 @@ namespace CampaignService.Services.FilterServices
         #region Fields
         private readonly ICampaignService campaignService;
         private readonly IShippingMethodService shippingMethodService;
+        private readonly ICampaignFilterService campaignFilterService;
         #endregion
 
         #region Ctor
-        public FilterService(ICampaignService campaignService, IShippingMethodService shippingMethodService)
+        public FilterService(ICampaignService campaignService, 
+            IShippingMethodService shippingMethodService, 
+            ICampaignFilterService campaignFilterService)
         {
             this.campaignService = campaignService;
             this.shippingMethodService = shippingMethodService;
+            this.campaignFilterService = campaignFilterService;
         }
         #endregion
 
@@ -27,6 +32,8 @@ namespace CampaignService.Services.FilterServices
         public async Task<ICollection<CampaignModel>> FilteredCampaigns(CampaignRequest request)
         {
             var filteredCampaigns = await campaignService.GetAllActiveCampaigns();
+
+            filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
 
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMail(request.Email, filteredCampaigns);
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);

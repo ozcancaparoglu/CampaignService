@@ -6,8 +6,9 @@ namespace CampaignService.Services.CampaignFilterServices
 {
     public interface ICampaignFilterService
     {
-        #region Db Methods
         
+        #region Db Methods
+
         /// <summary>
         /// Gets campaign filters by campaignId arranges redis key and caches
         /// </summary>
@@ -16,5 +17,7 @@ namespace CampaignService.Services.CampaignFilterServices
         Task<ICollection<CampaignFilterModel>> GetCampaignFilters(int campaignId);
 
         #endregion
+
+        ICollection<CampaignModel> FilterCampaignsWithCampaignFilter(int customerId, ICollection<CampaignModel> modelList);
     }
 }

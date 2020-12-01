@@ -1,11 +1,11 @@
 ﻿namespace CampaignService.Common.Enums
 {
-    public class CampaignFilters
+    public static class CampaignFilters
     {
-        public static string Segment = "Segment";
-        public static string Account = "Account";
-        public static string LoyaltyCard = "LoyaltyCard";
-        public static string CustomerId = "CustomerId";
-        public static string Specifications = "Specifications";
+        public const string Segment = "Segment";
+        public const string Account = "Account";
+        public const string LoyaltyCard = "LoyaltyCard";
+        public const string CustomerId = "CustomerId";
+        public const string Specifications = "Specifications";
     }
 }
