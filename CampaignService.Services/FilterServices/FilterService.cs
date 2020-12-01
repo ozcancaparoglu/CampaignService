@@ -32,23 +32,17 @@ namespace CampaignService.Services.FilterServices
 
             filteredCampaigns = campaignService.GetActiveCampaignsExclCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
 
-            filteredCampaigns = campaignService.GetActiveCampaignsWithCustomerMail(request.Email, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithCustomerMail(request.Email, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithDeviceTypes(request.DeviceType.ToString(), filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);
+            
+            filteredCampaigns = campaignService.FilterCampaignsWithBankName(request.BankName, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithCreditCartBankName(request.CardBankName, filteredCampaigns);
+            filteredCampaigns = campaignService.FilterCampaignsWithPaymentMethodSystemName(request.PaymentMethodSystemName, filteredCampaigns);
 
-            filteredCampaigns = campaignService.GetActiveCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithDeviceTypes(request.DeviceType.ToString(), filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);
-
-            filteredCampaigns = shippingMethodService.GetActiveCampaignsWithShippingMethod(request.LastShippingOption, filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithBankName(request.BankName, filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithCreditCartBankName(request.CardBankName, filteredCampaigns);
-
-            filteredCampaigns = campaignService.GetActiveCampaignsWithPaymentMethodSystemName(request.PaymentMethodSystemName, filteredCampaigns);
+            filteredCampaigns = shippingMethodService.FilterCampaignsWithShippingMethod(request.LastShippingOption, filteredCampaigns);
 
             return filteredCampaigns;
 

@@ -1,10 +1,11 @@
 ﻿using CampaignService.Data.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CampaignService.Services.GenericAttributeServices
 {
     public interface IGenericAttributeService
     {
-        Task<GenericAttributeModel> GetByEntityKey(string key, int entityId);
+        Task<ICollection<GenericAttributeModel>> GetGenericAttribute(GenericAttributeModel model);
     }
 }
