@@ -1,5 +1,6 @@
 ﻿using CampaignService.Common.Cache;
 using CampaignService.Common.Enums;
+using CampaignService.Common.Models;
 using CampaignService.Common.Services;
 using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
@@ -8,6 +9,7 @@ using CampaignService.Logging;
 using CampaignService.Repositories;
 using CampaignService.Services.GenericAttributeServices;
 using CampaignService.UnitOfWorks;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +25,7 @@ namespace CampaignService.Services.CampaignFilterServices
 
         private readonly IGenericAttributeService genericAttributeService;
 
-        private readonly IGenericRepository<CampaignService_CampaignFilter> campaignFilterRepo;
+        private readonly IGenericRepository<CampaignService_CampaignFilters> campaignFilterRepo;
 
         public CampaignFilterService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager,
             IGenericAttributeService genericAttributeService)
@@ -35,7 +37,7 @@ namespace CampaignService.Services.CampaignFilterServices
 
             this.genericAttributeService = genericAttributeService;
 
-            campaignFilterRepo = this.unitOfWork.Repository<CampaignService_CampaignFilter>();
+            campaignFilterRepo = this.unitOfWork.Repository<CampaignService_CampaignFilters>();
         }
 
         #region Db Methods
@@ -53,39 +55,87 @@ namespace CampaignService.Services.CampaignFilterServices
                 await redisCache.SetAsync($"{CacheStatics.CampaignFilters}_{campaignId}", entityList, CacheStatics.CampaignFiltersCacheTime);
             }
 
-            return autoMapper.MapCollection<CampaignService_CampaignFilter, CampaignFilterModel>
-                (await redisCache.GetAsync<ICollection<CampaignService_CampaignFilter>>($"{CacheStatics.CampaignFilters}_{campaignId}"))
+            return autoMapper.MapCollection<CampaignService_CampaignFilters, CampaignFilterModel>
+                (await redisCache.GetAsync<ICollection<CampaignService_CampaignFilters>>($"{CacheStatics.CampaignFilters}_{campaignId}"))
                 .ToList();
         }
+
         #endregion
 
         #region Filter Methods
 
         /// <summary>
-        /// Active campaigns that can be benefited filter by customer email address
+        /// Active campaigns that can be benefited filter by campaign filters
         /// </summary>
-        /// <param name="email">Customer email</param>
+        /// <param name="customerId">Customer id</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         public ICollection<CampaignModel> FilterCampaignsWithCampaignFilter(int customerId, ICollection<CampaignModel> modelList)
         {
-            //TODO: Refactor and UseCampaignFilter
+            var campaignsFilters = new List<CampaignFilterModel>();
 
-            var customerAttributeAccountAndSegment = genericAttributeService.GetGenericAttribute(new GenericAttributeModel
+            foreach (CampaignModel campaign in modelList)
+            {
+                campaignsFilters.AddRange(GetCampaignFilters(campaign.Id).Result);
+            }
+
+            if (campaignsFilters == null || campaignsFilters.Count == 0)
+                return modelList;
+
+            var exceptCampaignIds = new List<int>();
+            exceptCampaignIds.AddRange(FilterAccountAndSegment(customerId, campaignsFilters));
+
+            if (exceptCampaignIds == null || exceptCampaignIds.Count == 0)
+                return modelList;
+
+            modelList = modelList.Where(x => !exceptCampaignIds.Contains(x.Id)).ToList();
+
+            return modelList;
+        }
+
+        private ICollection<int> FilterAccountAndSegment(int customerId, List<CampaignFilterModel> campaignFilterModelList)
+        {
+            var exceptCampaignIdList = new List<int>();
+            var accountAndSegmentFilters = campaignFilterModelList.Where(x => x.FilterType == CampaignFilters.Account || x.FilterType == CampaignFilters.Segment).ToList();
+
+            if (accountAndSegmentFilters == null || accountAndSegmentFilters.Count == 0)
+                return exceptCampaignIdList;
+
+            AccountAndSegment accountAndSegment = null;
+
+            var customerAccountAndSegment = genericAttributeService.GetGenericAttribute(new GenericAttributeModel
             {
                 EntityId = customerId,
                 KeyGroup = GenericAttributeKeyAndGroups.Customer,
                 Key = GenericAttributeKeyAndGroups.AccountAndSegment
             }).Result;
 
-            LogRequestModel logRequestModel = new LogRequestModel()
+            if (customerAccountAndSegment == null && string.IsNullOrWhiteSpace(customerAccountAndSegment.Value))
+                return exceptCampaignIdList;
+
+            accountAndSegment = JsonConvert.DeserializeObject<AccountAndSegment>(customerAccountAndSegment.Value);
+            bool checkFilterValue = false;
+
+            foreach (var campaignFilter in accountAndSegmentFilters)
             {
-                EntityType = "GetActiveCampaignsWithCustomerMail"
-            };
-            loggerManager.LogInfo(logRequestModel);
-            return FilterPredication(modelList,
-                x => !string.IsNullOrWhiteSpace(x.Customers) && x.Customers.Contains("ozcan.caparoglu"),
-                x => string.IsNullOrWhiteSpace(x.Customers));
+                var filterValue = campaignFilter.FilterValue.Split("=")[1]; //TODO: Db böyle yazacağınız value batsın.
+
+                if (campaignFilter.FilterType == CampaignFilters.Segment)
+                {
+                    checkFilterValue = accountAndSegment.CustomerSegments.Any(x => x.Key == filterValue || x.Value == filterValue);
+                    if (!checkFilterValue)
+                        exceptCampaignIdList.Add(campaignFilter.CampaignId);
+                }
+                //TODO: Account örneği bulamadım db'lerde aynıdır segment'le diye tahmin ediyorum. Tekrar kontrol edilecek
+                else if (campaignFilter.FilterType == CampaignFilters.Account)
+                {
+                    checkFilterValue = accountAndSegment.AccountIds.Any(x => x.Key == filterValue || x.Value == filterValue);
+                    if (!checkFilterValue)
+                        exceptCampaignIdList.Add(campaignFilter.CampaignId);
+                }
+            }
+
+            return exceptCampaignIdList;
         }
 
 

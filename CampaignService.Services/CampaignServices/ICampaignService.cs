@@ -96,7 +96,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="roleIds">Payment method system name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsWithCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsWithCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList);
 
         /// <summary>
         /// Active campaigns that can be benefited filter by roleIds
@@ -104,7 +104,7 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="roleIds">Payment method system name</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> GetActiveCampaignsExclCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList);
+        ICollection<CampaignModel> FilterCampaignsExclCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList);
 
         #endregion
 

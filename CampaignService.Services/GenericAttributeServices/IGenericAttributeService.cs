@@ -13,7 +13,7 @@ namespace CampaignService.Services.GenericAttributeServices
         /// </summary>
         /// <param name="model">Generic attribute model</param>
         /// <returns>List of Generic Attributes</returns>
-        Task<ICollection<GenericAttributeModel>> GetGenericAttribute(GenericAttributeModel model);
+        Task<GenericAttributeModel> GetGenericAttribute(GenericAttributeModel model);
 
         #endregion
     }

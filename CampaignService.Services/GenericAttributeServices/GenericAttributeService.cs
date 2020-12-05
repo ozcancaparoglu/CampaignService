@@ -41,7 +41,7 @@ namespace CampaignService.Services.GenericAttributeServices
         /// </summary>
         /// <param name="model">Generic attribute model</param>
         /// <returns>List of Generic Attributes</returns>
-        public async Task<ICollection<GenericAttributeModel>> GetGenericAttribute(GenericAttributeModel model)
+        public async Task<GenericAttributeModel> GetGenericAttribute(GenericAttributeModel model)
         {
             var filterModel = new FilterModel { Filters = new List<FilterItem>() };
             var properties = model.GetType().GetProperties();
@@ -63,17 +63,9 @@ namespace CampaignService.Services.GenericAttributeServices
 
             var expression = GenericExpressionBinding<GenericAttribute>(filterModel);
 
-            var entityList = await genericAttributeRepo.FindAllAsync(expression);
+            var entity = await genericAttributeRepo.FindAsync(expression);
 
-            return autoMapper.MapCollection<GenericAttribute, GenericAttributeModel>(entityList).ToList();
-
-            //var entityList = await genericAttributeRepo.FindAllAsync(x => x.Key == model.Key 
-            //|| x.KeyGroup == model.KeyGroup 
-            //|| x.EntityId == model.EntityId 
-            //|| x.Value == model.Value 
-            //|| x.StoreId == model.StoreId);
-
-
+            return autoMapper.MapObject<GenericAttribute, GenericAttributeModel>(entity);
 
         }
 

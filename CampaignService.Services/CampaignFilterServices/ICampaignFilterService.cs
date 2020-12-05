@@ -18,6 +18,12 @@ namespace CampaignService.Services.CampaignFilterServices
 
         #endregion
 
+        /// <summary>
+        /// Active campaigns that can be benefited filter by campaign filters
+        /// </summary>
+        /// <param name="customerId">Customer id</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
         ICollection<CampaignModel> FilterCampaignsWithCampaignFilter(int customerId, ICollection<CampaignModel> modelList);
     }
 }

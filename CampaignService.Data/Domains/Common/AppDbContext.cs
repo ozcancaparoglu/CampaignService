@@ -33,8 +33,8 @@ namespace CampaignService.Data.Domains.Common
 
         //Çok önemli sadece testleri run ederken kullanın. Publish çıktığımızda kullanılmamalı. Comment yapıp kapatın.
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Data Source=85.111.48.114,1433;Initial Catalog=suwen_ozcan;Integrated Security=False;Persist Security Info=False;User ID=ozcandb;Password=a1fX0J3");
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //    => options.UseSqlServer("Data Source=85.111.48.114,1433;Initial Catalog=suwen_ozcan;Integrated Security=False;Persist Security Info=False;User ID=ozcandb;Password=a1fX0J3");
 
         #endregion
 
@@ -43,7 +43,7 @@ namespace CampaignService.Data.Domains.Common
         public virtual DbSet<CampaignService_Campaigns> CampaignService_Campaigns { get; set; }
         public virtual DbSet<CampaignService_CampaignCouponCode> CampaignService_CampaignCouponCode { get; set; }
         public virtual DbSet<CampaignService_CampaignCouponUsage> CampaignService_CampaignCouponUsage { get; set; }
-        public virtual DbSet<CampaignService_CampaignFilter> CampaignService_CampaignFilter { get; set; }
+        public virtual DbSet<CampaignService_CampaignFilters> CampaignService_CampaignFilters { get; set; }
         public virtual DbSet<CampaignService_CampaignUsageHistory> CampaignService_CampaignUsageHistory { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCategoryMapping> ProductCategoryMapping { get; set; }

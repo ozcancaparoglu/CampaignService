@@ -26,6 +26,8 @@ namespace CampaignService.Api.Controllers
             int[] roleIds = { 1,3 };
             var campaignRequest = new CampaignRequest
             {
+                //CustomerId = 12201763,
+                //Email = "yanikoglu@superonline.com",
                 CustomerId = 19496140,
                 Email = "semaimer34@gmail.com",
                 CustomerRoleIds = roleIds
