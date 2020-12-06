@@ -10,7 +10,6 @@ using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CampaignService.Services.GenericAttributeServices
@@ -37,11 +36,12 @@ namespace CampaignService.Services.GenericAttributeServices
         #region Db Methods
 
         /// <summary>
-        /// Gets Generic Attribute with model.
+        /// Gets GenericAttribute with model. Automatically find fields create expression with operatorEnum parameter and joins expressions
         /// </summary>
-        /// <param name="model">Generic attribute model</param>
-        /// <returns>List of Generic Attributes</returns>
-        public async Task<GenericAttributeModel> GetGenericAttribute(GenericAttributeModel model)
+        /// <param name="model">Generic attribute model with values to search on db</param>
+        /// <param name="operatorEnum">Operator enum default IsEqualTo</param>
+        /// <returns>GenericAttribute Model</returns>
+        public async Task<GenericAttributeModel> GetGenericAttribute(GenericAttributeModel model, FilterOperatorEnum operatorEnum = FilterOperatorEnum.IsEqualTo)
         {
             var filterModel = new FilterModel { Filters = new List<FilterItem>() };
             var properties = model.GetType().GetProperties();
@@ -56,7 +56,7 @@ namespace CampaignService.Services.GenericAttributeServices
                 filterModel.Filters.Add(new FilterItem
                 {
                     Field = property.Name,
-                    Operator = FilterOperatorEnum.IsEqualTo,
+                    Operator = operatorEnum,
                     Value = value
                 });
             }

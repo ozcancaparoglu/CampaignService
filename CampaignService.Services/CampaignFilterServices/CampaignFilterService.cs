@@ -7,6 +7,7 @@ using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
 using CampaignService.Logging;
 using CampaignService.Repositories;
+using CampaignService.Services.CustomerServices;
 using CampaignService.Services.GenericAttributeServices;
 using CampaignService.UnitOfWorks;
 using Newtonsoft.Json;
@@ -24,11 +25,16 @@ namespace CampaignService.Services.CampaignFilterServices
         private readonly ILoggerManager loggerManager;
 
         private readonly IGenericAttributeService genericAttributeService;
+        private readonly ICustomerService customerService;
 
         private readonly IGenericRepository<CampaignService_CampaignFilters> campaignFilterRepo;
 
-        public CampaignFilterService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager,
-            IGenericAttributeService genericAttributeService)
+        public CampaignFilterService(IUnitOfWork unitOfWork, 
+            IAutoMapperConfiguration autoMapper, 
+            IRedisCache redisCache, 
+            ILoggerManager loggerManager,
+            IGenericAttributeService genericAttributeService,
+            ICustomerService customerService)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
@@ -36,6 +42,7 @@ namespace CampaignService.Services.CampaignFilterServices
             this.loggerManager = loggerManager;
 
             this.genericAttributeService = genericAttributeService;
+            this.customerService = customerService;
 
             campaignFilterRepo = this.unitOfWork.Repository<CampaignService_CampaignFilters>();
         }
@@ -84,6 +91,7 @@ namespace CampaignService.Services.CampaignFilterServices
 
             var exceptCampaignIds = new List<int>();
             exceptCampaignIds.AddRange(FilterAccountAndSegment(customerId, campaignsFilters));
+            exceptCampaignIds.AddRange(FilterLoyaltyCardNumber(customerId, campaignsFilters));
 
             if (exceptCampaignIds == null || exceptCampaignIds.Count == 0)
                 return modelList;
@@ -93,6 +101,12 @@ namespace CampaignService.Services.CampaignFilterServices
             return modelList;
         }
 
+        /// <summary>
+        /// Filtering campaign by account and segment type
+        /// </summary>
+        /// <param name="customerId">Customer id</param>
+        /// <param name="campaignFilterModelList">CampaignFilter list</param>
+        /// <returns>Campaign id's which are going to exclude from active campaigns list</returns>
         private ICollection<int> FilterAccountAndSegment(int customerId, List<CampaignFilterModel> campaignFilterModelList)
         {
             var exceptCampaignIdList = new List<int>();
@@ -118,7 +132,8 @@ namespace CampaignService.Services.CampaignFilterServices
 
             foreach (var campaignFilter in accountAndSegmentFilters)
             {
-                var filterValue = campaignFilter.FilterValue.Split("=")[1]; //TODO: Db böyle yazacağınız value batsın.
+                //TODO: Db böyle yazacağınız value batsın.
+                var filterValue = campaignFilter.FilterValue.Split("=")[1]; 
 
                 if (campaignFilter.FilterType == CampaignFilters.Segment)
                 {
@@ -134,6 +149,29 @@ namespace CampaignService.Services.CampaignFilterServices
                         exceptCampaignIdList.Add(campaignFilter.CampaignId);
                 }
             }
+
+            return exceptCampaignIdList;
+        }
+
+        /// <summary>
+        /// Filtering campaign by loyalty card existance
+        /// </summary>
+        /// <param name="customerId">Customer id</param>
+        /// <param name="campaignFilterModelList">CampaignFilter list</param>
+        /// <returns>Campaign id's which are going to exclude from active campaigns list</returns>
+        private ICollection<int> FilterLoyaltyCardNumber(int customerId, List<CampaignFilterModel> campaignFilterModelList)
+        {
+            var exceptCampaignIdList = new List<int>();
+            var loyaltyCardFilter = campaignFilterModelList.FirstOrDefault(x => x.FilterType == CampaignFilters.LoyaltyCard);
+
+            if (loyaltyCardFilter == null)
+                return exceptCampaignIdList;
+
+            var customer = customerService.GetCustomerById(customerId).Result;
+
+            //TODO: LoyaltyCardIsActive diye bir alan var veritabanında muhtemelen kullanılmıyor. Emin olun, kullanıyorsa is active kontrolü de yapılmalı.
+            if (customer == null || string.IsNullOrWhiteSpace(customer.LoyaltyCardNumber))
+                exceptCampaignIdList.Add(loyaltyCardFilter.CampaignId);
 
             return exceptCampaignIdList;
         }

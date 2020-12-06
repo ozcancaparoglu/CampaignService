@@ -1,11 +1,8 @@
-﻿using CampaignService.Common.Entities;
-using CampaignService.Common.Enums;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,6 +49,7 @@ namespace CampaignService.Data.Domains.Common
         public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public virtual DbSet<GenericAttribute> GenericAttribute { get; set; }
         public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
 
         #endregion
 

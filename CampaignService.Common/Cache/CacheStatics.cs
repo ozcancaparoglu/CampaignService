@@ -14,5 +14,11 @@
         public static string CampaignFilters = "campaignFilters";
         public static int CampaignFiltersCacheTime = 120;
 
+        /// <summary>
+        /// Customer join key with Customer Id
+        /// </summary>
+        public static string Customer = "Customer";
+        public static int CustomerCacheTime = 120;
+
     }
 }

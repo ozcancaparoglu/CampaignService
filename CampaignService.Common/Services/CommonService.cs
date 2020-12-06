@@ -31,18 +31,22 @@ namespace CampaignService.Common.Services
             return predicateList.Union(predicateList2).ToList();
         }
 
-        protected Expression<Func<T, bool>> GenericExpressionBinding<T>(FilterModel filterModel) where T : class
+        protected Expression<Func<T, bool>> GenericExpressionBinding<T>(FilterModel filterModel, ExpressionJoint joint = ExpressionJoint.And) where T : class
         {
             Expression<Func<T, bool>> finalExpression = null;
 
             foreach (var filter in filterModel.Filters)
             {
                 var value = filter.Value;
+
                 Expression<Func<T, bool>> predicate = CreatePredicate<T>(filter.Field, value, filter.Operator);
+
                 if (finalExpression == null)
                     finalExpression = predicate;
-                else
+                else if (joint == ExpressionJoint.And)
                     finalExpression = ExpressionExtensions.And(finalExpression, predicate);
+                else
+                    finalExpression = ExpressionExtensions.Or(finalExpression, predicate);
             }
             return finalExpression;
         }
