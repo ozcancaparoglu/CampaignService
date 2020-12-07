@@ -29,10 +29,7 @@ namespace CampaignService.Services.CampaignFilterServices
 
         private readonly IGenericRepository<CampaignService_CampaignFilters> campaignFilterRepo;
 
-        public CampaignFilterService(IUnitOfWork unitOfWork, 
-            IAutoMapperConfiguration autoMapper, 
-            IRedisCache redisCache, 
-            ILoggerManager loggerManager,
+        public CampaignFilterService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager,
             IGenericAttributeService genericAttributeService,
             ICustomerService customerService)
         {
@@ -82,9 +79,7 @@ namespace CampaignService.Services.CampaignFilterServices
             var campaignsFilters = new List<CampaignFilterModel>();
 
             foreach (CampaignModel campaign in modelList)
-            {
                 campaignsFilters.AddRange(GetCampaignFilters(campaign.Id).Result);
-            }
 
             if (campaignsFilters == null || campaignsFilters.Count == 0)
                 return modelList;
@@ -173,10 +168,8 @@ namespace CampaignService.Services.CampaignFilterServices
             if (customer == null || string.IsNullOrWhiteSpace(customer.LoyaltyCardNumber))
                 exceptCampaignIdList.Add(loyaltyCardFilter.CampaignId);
 
-            return exceptCampaignIdList;
+             return exceptCampaignIdList;
         }
-
-
 
         #endregion
     }

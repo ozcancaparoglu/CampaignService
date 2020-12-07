@@ -178,6 +178,7 @@ namespace CampaignService.Services.CampaignServices
                 x => !string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames) && x.PaymentMethodSystemNames == paymentMethodSystemName,
                 x => string.IsNullOrWhiteSpace(x.PaymentMethodSystemNames));
         }
+
         /// <summary>
         /// Active campaigns that can be benefited filter by roleIds
         /// </summary>

@@ -6,6 +6,7 @@ using CampaignService.Services.ShippingMethodServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using CampaignService.Services.CampaignUsageHistoryServices;
 
 namespace CampaignService.Services.FilterServices
 {
@@ -15,16 +16,19 @@ namespace CampaignService.Services.FilterServices
         private readonly ICampaignService campaignService;
         private readonly IShippingMethodService shippingMethodService;
         private readonly ICampaignFilterService campaignFilterService;
+        private readonly ICampaignUsageHistoryService campaignUsageHistoryService;
         #endregion
 
         #region Ctor
         public FilterService(ICampaignService campaignService, 
             IShippingMethodService shippingMethodService, 
-            ICampaignFilterService campaignFilterService)
+            ICampaignFilterService campaignFilterService,
+            ICampaignUsageHistoryService campaignUsageHistoryService)
         {
             this.campaignService = campaignService;
             this.shippingMethodService = shippingMethodService;
             this.campaignFilterService = campaignFilterService;
+            this.campaignUsageHistoryService = campaignUsageHistoryService;
         }
         #endregion
 
@@ -34,6 +38,7 @@ namespace CampaignService.Services.FilterServices
         {
             var filteredCampaigns = await campaignService.GetAllActiveCampaigns();
 
+            filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
             filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
 
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
