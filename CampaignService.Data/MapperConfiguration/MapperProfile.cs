@@ -23,6 +23,7 @@ namespace CampaignService.Data.MapperConfiguration
             CreateMap<GenericAttribute, GenericAttributeModel>().MaxDepth(depth).ReverseMap();
             CreateMap<ShippingMethod, ShippingMethodModel>().MaxDepth(depth).ReverseMap();
             CreateMap<Customer, CustomerModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<Order, OrderModel>().MaxDepth(depth).ReverseMap();
         }
     }
 }

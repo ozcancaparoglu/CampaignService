@@ -19,10 +19,7 @@ namespace CampaignService.Services.CustomerServices
 
         private readonly IGenericRepository<Customer> customerRepo;
 
-        public CustomerService(IUnitOfWork unitOfWork,
-            IAutoMapperConfiguration autoMapper,
-            IRedisCache redisCache,
-            ILoggerManager loggerManager)
+        public CustomerService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, IRedisCache redisCache, ILoggerManager loggerManager)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;

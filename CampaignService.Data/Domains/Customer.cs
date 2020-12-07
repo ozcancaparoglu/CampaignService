@@ -27,8 +27,6 @@ namespace CampaignService.Data.Domains
         public DateTime CreatedOnUtc { get; set; }
         public DateTime? LastLoginDateUtc { get; set; }
         public DateTime LastActivityDateUtc { get; set; }
-        public int? BillingAddressId { get; set; }
-        public int? ShippingAddressId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ErpCode { get; set; }
