@@ -36,9 +36,7 @@ namespace CampaignService.Services.FilterServices
 
             filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
 
-            //TODO: Not implemented. Bana her iki koşulu da tek bir fonksiyonda çözebiliriz gibi geliyor. Dikkat!
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
-            filteredCampaigns = campaignService.FilterCampaignsExclCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
 
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMail(request.Email, filteredCampaigns);
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);

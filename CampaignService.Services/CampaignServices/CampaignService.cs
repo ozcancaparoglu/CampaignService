@@ -185,19 +185,8 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         public ICollection<CampaignModel> FilterCampaignsWithCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList)
-        {         
-            //TODO  
-            return modelList;
-        }
-        /// <summary>
-        /// Active campaigns that can be benefited filter by roleIds
-        /// </summary>
-        /// <param name="roleIds">Payment method system name</param>
-        /// <param name="modelList">Active campaigns</param>
-        /// <returns></returns>
-        public ICollection<CampaignModel> FilterCampaignsExclCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList)
         {
-            //TODO
+            //TODO            
             return modelList;
         }
 

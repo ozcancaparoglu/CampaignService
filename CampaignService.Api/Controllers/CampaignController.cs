@@ -3,6 +3,7 @@ using CampaignService.Logging;
 using CampaignService.Services.FilterServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CampaignService.Services.CalculationService;
 
 namespace CampaignService.Api.Controllers
 {
@@ -12,11 +13,13 @@ namespace CampaignService.Api.Controllers
     {
         private readonly IFilterService filterService;
         private readonly ILoggerManager loggerManager;
+        private readonly ICalculationService calculationService;
 
-        public CampaignController(IFilterService filterService, ILoggerManager loggerManager)
+        public CampaignController(IFilterService filterService, ILoggerManager loggerManager,ICalculationService calculationService)
         {
             this.filterService = filterService;
             this.loggerManager = loggerManager;
+            this.calculationService = calculationService;
         }
 
         // GET api/values
@@ -32,7 +35,10 @@ namespace CampaignService.Api.Controllers
                 //Email = "semaimer34@gmail.com",
                 CustomerRoleIds = roleIds
             };
+            var deneme = calculationService.Deneme("3*(2+4)");// Test amaçlı eklendi. Kaldırılabilir //TODO
+
             var filteredCampaigns = await filterService.FilteredCampaigns(campaignRequest);
+            
 
             return Ok(filteredCampaigns);
         }
