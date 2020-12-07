@@ -35,7 +35,7 @@ namespace CampaignService.Api.Controllers
                 //Email = "semaimer34@gmail.com",
                 CustomerRoleIds = roleIds
             };
-            var deneme = calculationService.Deneme("3*(2+4)");// Test amaçlı eklendi. Kaldırılabilir //TODO
+            var deneme = calculationService.Calculate("3*(2+4)");// Test amaçlı eklendi. Kaldırılabilir //TODO
 
             var filteredCampaigns = await filterService.FilteredCampaigns(campaignRequest);
             
