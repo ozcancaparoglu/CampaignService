@@ -2,10 +2,12 @@
 using CampaignService.Common.Services;
 using CampaignService.Data.Domains;
 using CampaignService.Data.MapperConfiguration;
+using CampaignService.Data.Models;
 using CampaignService.Logging;
 using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,6 +39,22 @@ namespace CampaignService.Services.OrderServices
             var entityList = await orderRepo.FindAllAsync(x => x.CustomerId == customerId && x.CreatedOnUtc >= startDate && x.CreatedOnUtc <= endDate);
             
             return entityList.Sum(x => x.OrderTotal);
+        }
+
+        public int GetCustomerOrderCount(int customerId)
+        {
+            return orderRepo.Table().Where(x => x.CustomerId == customerId).Count();
+        }
+
+        #endregion
+
+        #region Filter Methods
+
+        public ICollection<CampaignModel> FilterRestrictedNthOrder(int customerId, ICollection<CampaignModel> modelList)
+        {
+            var customerOrderCount = GetCustomerOrderCount(customerId).ToString(); //TODO: yazacağınız algoritmaya uyayım.
+
+            return modelList.Where(x => x.RestrictedToCustomerNthOrder == null || x.RestrictedToCustomerNthOrder.Contains(customerOrderCount.ToString())).ToList();
         }
 
         #endregion

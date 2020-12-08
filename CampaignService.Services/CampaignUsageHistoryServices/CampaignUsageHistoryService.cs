@@ -47,11 +47,17 @@ namespace CampaignService.Services.CampaignUsageHistoryServices
         /// <param name="customerId">Customer id</param>
         /// <param name="campaignId">Campaign id</param>
         /// <returns>CampaignUsageHistoryModel list</returns>
-        public ICollection<CampaignUsageHistoryModel> GetCampaignUsageHistories(int customerId, int campaignId)
+        public ICollection<CampaignUsageHistoryModel> GetCampaignUsageHistoriesByCustomer(int customerId, int campaignId)
         {
             var entityList = campaignUsageHistoryRepo.Filter(x => x.CustomerId == customerId && x.CampaignId == campaignId, null, "Campaign");
 
             return autoMapper.MapCollection<CampaignService_CampaignUsageHistory, CampaignUsageHistoryModel>(entityList).ToList();
+        }
+
+        public int GetCampaignUsageHistoryCountById(int campaignId)
+        {
+            //TODO: Count yapacaksanız bu tarz kullanın IQuerable o yüzden sorguyu atmaz db'ye Count diyene kadar.
+            return campaignUsageHistoryRepo.Table().Where(x => x.CampaignId == campaignId).Count();
         }
 
         #endregion
@@ -63,7 +69,7 @@ namespace CampaignService.Services.CampaignUsageHistoryServices
             var campaignsUsageHistory = new List<CampaignUsageHistoryModel>();
 
             foreach (CampaignModel campaign in modelList)
-                campaignsUsageHistory.AddRange(GetCampaignUsageHistories(customerId, campaign.Id));
+                campaignsUsageHistory.AddRange(GetCampaignUsageHistoriesByCustomer(customerId, campaign.Id));
 
             if (campaignsUsageHistory == null || campaignsUsageHistory.Count == 0)
                 return modelList;
@@ -87,26 +93,33 @@ namespace CampaignService.Services.CampaignUsageHistoryServices
             foreach (var groupedCampaignUsage in groupedCampaignUsageList)
             {
                 var campaignModel = groupedCampaignUsage.FirstOrDefault();
+                var campaignUsageLimitationCount = campaignModel.Campaign.CampaignUsageLimitationCount ?? 0;
+
                 switch (campaignModel.Campaign.CampaignUsageLimitationType)
                 {
                     case (int)CampaignLimitationType.Unlimited:
                         continue;
 
                     case (int)CampaignLimitationType.NTimesOnly:
+                        if (GetCampaignUsageHistoryCountById(campaignModel.CampaignId) >= campaignUsageLimitationCount)
+                            exceptCampaignIdList.Add(campaignModel.CampaignId);
+                        break;
+
                     case (int)CampaignLimitationType.NTimesPerCustomer:
-                        if (groupedCampaignUsage.Count > campaignModel.Campaign.CampaignUsageLimitationCount)
-                            exceptCampaignIdList.Add(campaignModel.Id);
+                        if (groupedCampaignUsage.Count > campaignUsageLimitationCount)
+                            exceptCampaignIdList.Add(campaignModel.CampaignId);
                         break;
 
                     case (int)CampaignLimitationType.NTimesPerCustomerPerCalendarYear:
                         if (orderService.GetCustomerOrdersTotalInGivenTime(customerId, DateTime.Now, DateTime.Now.AddYears(-1)).Result > campaignModel.Campaign.BuyConditionCustomerPreviousOrdersTotal)
-                            exceptCampaignIdList.Add(campaignModel.Id);
+                            exceptCampaignIdList.Add(campaignModel.CampaignId);
                         break;
 
                     case (int)CampaignLimitationType.NTimesPerCustomerPerDay:
                         if (orderService.GetCustomerOrdersTotalInGivenTime(customerId, DateTime.Now, DateTime.Now.AddDays(-1)).Result > campaignModel.Campaign.BuyConditionCustomerPreviousOrdersTotal)
-                            exceptCampaignIdList.Add(campaignModel.Id);
+                            exceptCampaignIdList.Add(campaignModel.CampaignId);
                         break;
+
                     default:
                         break;
                 }

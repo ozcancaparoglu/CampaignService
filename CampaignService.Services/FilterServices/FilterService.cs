@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using CampaignService.Services.CampaignUsageHistoryServices;
+using CampaignService.Services.OrderServices;
 
 namespace CampaignService.Services.FilterServices
 {
@@ -17,18 +18,21 @@ namespace CampaignService.Services.FilterServices
         private readonly IShippingMethodService shippingMethodService;
         private readonly ICampaignFilterService campaignFilterService;
         private readonly ICampaignUsageHistoryService campaignUsageHistoryService;
+        private readonly IOrderService orderService;
         #endregion
 
         #region Ctor
         public FilterService(ICampaignService campaignService, 
             IShippingMethodService shippingMethodService, 
             ICampaignFilterService campaignFilterService,
-            ICampaignUsageHistoryService campaignUsageHistoryService)
+            ICampaignUsageHistoryService campaignUsageHistoryService,
+            IOrderService orderService)
         {
             this.campaignService = campaignService;
             this.shippingMethodService = shippingMethodService;
             this.campaignFilterService = campaignFilterService;
             this.campaignUsageHistoryService = campaignUsageHistoryService;
+            this.orderService = orderService;
         }
         #endregion
 
@@ -40,6 +44,7 @@ namespace CampaignService.Services.FilterServices
 
             filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
             filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
+            filteredCampaigns = orderService.FilterRestrictedNthOrder(request.CustomerId, filteredCampaigns);
 
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
 
