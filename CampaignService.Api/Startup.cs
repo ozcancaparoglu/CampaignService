@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CampaignService.Api.Configuration;
 using CampaignService.Data.Domains.Common;
 using CampaignService.Logging;
 using CampaignService.Services.Ioc;
@@ -35,6 +36,8 @@ namespace CampaignService.Api
 
             services.AddControllers();
             services.AddRazorPages();
+            //Swagger
+            services.AddMySwagger();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -56,6 +59,9 @@ namespace CampaignService.Api
             app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); endpoints.MapControllers(); });
 
             app.UseHttpsRedirection();
+
+            app.UseMySwagger();
+
         }
     }
 }
