@@ -26,5 +26,16 @@ namespace CampaignService.Common.Services
 
             return predicateList.Union(predicateList2).ToList();
         }
+
+        protected IEnumerable<T> GetWithFilterPredication<T>(ICollection<T> modelList,
+           Func<T, bool> predicate, Func<T, T> selector1 = null)
+        {
+            foreach (var item in modelList)
+            {
+                var predicateList = modelList.Where(predicate).Select(selector1);
+                return predicateList.ToList();
+            }
+            return null;
+        }
     }
 }

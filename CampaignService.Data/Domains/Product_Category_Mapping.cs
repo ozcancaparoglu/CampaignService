@@ -1,15 +1,16 @@
 ﻿using CampaignService.Common.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CampaignService.Data.Domains
 {
-    public partial class ProductCategoryMapping : EntityBase
+    public partial class Product_Category_Mapping : EntityBase
     {
+
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
-        public bool IsFeaturedProduct { get; set; }
-        public int DisplayOrder { get; set; }
-        public bool? IsDefault { get; set; }
+        [ForeignKey("ProductId")]
+        public Product  Product{ get; set; }
     }
 }

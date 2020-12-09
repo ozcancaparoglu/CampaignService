@@ -43,12 +43,30 @@ namespace CampaignService.Services.CampaignServices
             {
                 DateTime now = DateTime.UtcNow;
                 var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
-                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, entityList, CacheStatics.AllActiveCampaignsCacheTime);
+
+                var campaignModel = autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList);
+               
+                // TODO : foreach'de where kullanma
+                // TODO : Linq ile yap
+                foreach (var campaign in campaignModel.Where(x => !string.IsNullOrEmpty(x.BuyConditionCategories)))
+                {
+                    campaign.BuyConditionCategoriesList = campaign.BuyConditionCategories.Split(',').Select(int.Parse).ToList();
+                }
+
+                foreach (var campaign in campaignModel.Where(x => !string.IsNullOrEmpty(x.BuyConditionIncludedProductIds)))
+                {
+                    campaign.BuyConditionIncludedProductIdList = campaign.BuyConditionIncludedProductIds.Split(',').Select(int.Parse).ToList();
+                }
+
+                foreach (var campaign in campaignModel.Where(x => !string.IsNullOrEmpty(x.BuyConditionExcludedProductIds)))
+                {
+                    campaign.BuyConditionExcludedProductIdList = campaign.BuyConditionExcludedProductIds.Split(',').Select(int.Parse).ToList();
+                }
+
+                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, campaignModel, CacheStatics.AllActiveCampaignsCacheTime);
             }
 
-            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>
-                (await redisCache.GetAsync<ICollection<CampaignService_Campaigns>>(CacheStatics.AllActiveCampaigns))
-                .ToList();
+            return await redisCache.GetAsync<ICollection<CampaignModel>>(CacheStatics.AllActiveCampaigns);
         }
 
         #endregion

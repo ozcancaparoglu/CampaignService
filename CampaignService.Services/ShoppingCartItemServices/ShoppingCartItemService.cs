@@ -2,7 +2,10 @@
 using CampaignService.Data.MapperConfiguration;
 using CampaignService.Data.Models;
 using CampaignService.Repositories;
+using CampaignService.Services.CategoryServices;
+using CampaignService.Services.ProductService;
 using CampaignService.UnitOfWorks;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +19,34 @@ namespace CampaignService.Services.ShoppingCartItemServices
         private readonly IUnitOfWork unitOfWork;
         private readonly IAutoMapperConfiguration autoMapper;
         private readonly IGenericRepository<ShoppingCartItem> shoppingCartItemRepo;
+        private readonly ICategoryService categoryService;
+        private readonly IProductService productService;
 
-        public ShoppingCartItemService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper)
+
+        public ShoppingCartItemService(IUnitOfWork unitOfWork, IAutoMapperConfiguration autoMapper, ICategoryService categoryService, IProductService productService)
         {
             this.unitOfWork = unitOfWork;
             this.autoMapper = autoMapper;
             shoppingCartItemRepo = this.unitOfWork.Repository<ShoppingCartItem>();
+            this.categoryService = categoryService;
+            this.productService = productService;
         }
 
         #region Methods
 
         public async Task<ICollection<ShoppingCartItemModel>> GetShoppingCartItems(int customerId)
         {
-            var entityList = await shoppingCartItemRepo.FindAllAsync(x => x.CustomerId == customerId);
-            return autoMapper.MapCollection<ShoppingCartItem, ShoppingCartItemModel>(entityList).ToList();
+            try
+            {
+                var entityList = shoppingCartItemRepo.Filter(x => x.CustomerId == customerId, null, "Product,Product.Product_Category_Mapping,Product.Product_Manufacturer_Mapping");
+                return autoMapper.MapCollection<ShoppingCartItem, ShoppingCartItemModel>(entityList).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
         }
 
         #endregion

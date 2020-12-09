@@ -1,4 +1,5 @@
 ﻿using CampaignService.Common.Entities;
+using CampaignService.Data.Domains;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,5 +26,8 @@ namespace CampaignService.Data.Models
         public byte? SystemPaymentType { get; set; }
         public byte InsertTypeId { get; set; }
         public string ProductNote { get; set; }
+        public ICollection<int> ProductCategoryIds { get; set; }
+        public string ProductSku { get; set; }
+        public virtual ProductModel Product { get; set; }
     }
 }

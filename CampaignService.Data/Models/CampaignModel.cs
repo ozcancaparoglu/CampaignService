@@ -85,6 +85,9 @@ namespace CampaignService.Data.Models
         public bool AddAutoGiftProductToBasket { get; set; }
         public decimal StaffSpendingLimit { get; set; }
         public string IncreasingDiscounts { get; set; }
+        public List<int> BuyConditionCategoriesList { get; set; }
+        public List<int> BuyConditionIncludedProductIdList { get; set; }
+        public List<int> BuyConditionExcludedProductIdList { get; set; }
 
         public virtual ICollection<CampaignCouponCodeModel> CampaignServiceCampaignCouponCodes { get; set; }
         public virtual ICollection<CampaignCouponUsageModel> CampaignServiceCampaignCouponUsages { get; set; }

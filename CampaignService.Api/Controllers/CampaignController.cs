@@ -25,8 +25,8 @@ namespace CampaignService.Api.Controllers
         {
             var campaignRequest = new CampaignRequest
             {
-                CustomerId = 19496140,
-                Email = "semaimer34@gmail.com"
+                CustomerId = 36666922,
+                Email = "semaimer34@gmail.com",
             };
             var filteredCampaigns = await filterService.FilteredCampaigns(campaignRequest);
 

@@ -1,5 +1,6 @@
 ﻿using CampaignService.Common.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace CampaignService.Data.Domains
 {
@@ -145,5 +146,7 @@ namespace CampaignService.Data.Domains
         public bool OnlyMarketPlaceSale { get; set; }
         public string MarketPlaceSku { get; set; }
         public string MarketplaceName { get; set; }
+        public ICollection<Product_Category_Mapping> Product_Category_Mapping { get; set; }
+        public ICollection<Product_Manufacturer_Mapping> Product_Manufacturer_Mapping { get; set; }
     }
 }

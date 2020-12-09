@@ -1,5 +1,6 @@
 ﻿using CampaignService.Common.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace CampaignService.Data.Models
 {
@@ -145,5 +146,7 @@ namespace CampaignService.Data.Models
         public bool OnlyMarketPlaceSale { get; set; }
         public string MarketPlaceSku { get; set; }
         public string MarketplaceName { get; set; }
+        public ICollection<ProductCategoryMappingModel> ProductCategoryMappingModel { get; set; }
+        public ICollection<ProductManufacturerMappingModel> ProductManufacturerMappingModel { get; set; }
     }
 }

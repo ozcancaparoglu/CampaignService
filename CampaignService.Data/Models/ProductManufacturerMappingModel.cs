@@ -9,7 +9,6 @@ namespace CampaignService.Data.Models
     {
         public int ProductId { get; set; }
         public int ManufacturerId { get; set; }
-        public bool IsFeaturedProduct { get; set; }
-        public int DisplayOrder { get; set; }
+        public virtual ProductModel Product { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CampaignService.Common.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CampaignService.Data.Domains
 {
@@ -24,5 +25,7 @@ namespace CampaignService.Data.Domains
         public byte? SystemPaymentType { get; set; }
         public byte InsertTypeId { get; set; }
         public string ProductNote { get; set; }
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
     }
 }
