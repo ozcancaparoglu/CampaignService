@@ -4,7 +4,7 @@ using System;
 
 namespace CampaignService.Data.Domains
 {
-    public partial class CampaignService_CampaignFilter : EntityBase
+    public partial class CampaignService_CampaignFilters : EntityBase
     {
         public int CampaignId { get; set; }
         public string FilterType { get; set; }

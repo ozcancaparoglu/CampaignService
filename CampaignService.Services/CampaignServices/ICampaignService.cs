@@ -40,8 +40,8 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="email">Customer email domain</param>
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
-        ICollection<CampaignModel> FilterCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList);
-        
+        ICollection<CampaignModel> FilterCampaignsWithCustomerMailDomain(string email, ICollection<CampaignModel> modelList);       
+
         /// <summary>
         /// Active campaigns that can be benefited filter by device type
         /// </summary>
@@ -89,6 +89,14 @@ namespace CampaignService.Services.CampaignServices
         /// <param name="modelList">Active campaigns</param>
         /// <returns></returns>
         ICollection<CampaignModel> FilterCampaignsWithPaymentMethodSystemName(string paymentMethodSystemName, ICollection<CampaignModel> modelList);
+
+        /// <summary>
+        /// Active campaigns that can be benefited filter by roleIds
+        /// </summary>
+        /// <param name="roleIds">Payment method system name</param>
+        /// <param name="modelList">Active campaigns</param>
+        /// <returns></returns>
+        ICollection<CampaignModel> FilterCampaignsWithCustomerRoleId(List<int> roleIds, ICollection<CampaignModel> modelList);
 
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using CampaignService.Common.Models;
 using CampaignService.Data.Models;
+using CampaignService.Services.CampaignFilterServices;
 using CampaignService.Services.CampaignServices;
 using CampaignService.Services.CategoryServices;
 using CampaignService.Services.ProductService;
@@ -7,6 +8,9 @@ using CampaignService.Services.ShippingMethodServices;
 using CampaignService.Services.ShoppingCartItemServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using CampaignService.Services.CampaignUsageHistoryServices;
+using CampaignService.Services.OrderServices;
 
 namespace CampaignService.Services.FilterServices
 {
@@ -15,16 +19,29 @@ namespace CampaignService.Services.FilterServices
         #region Fields
         private readonly ICampaignService campaignService;
         private readonly IShippingMethodService shippingMethodService;
+        private readonly ICampaignFilterService campaignFilterService;
+        private readonly ICampaignUsageHistoryService campaignUsageHistoryService;
+        private readonly IOrderService orderService;
         private readonly ICategoryService categoryService;
         private readonly IShoppingCartItemService shoppingCartItemService;
         private readonly IProductService productService;
         #endregion
 
         #region Ctor
-        public FilterService(ICampaignService campaignService, IShippingMethodService shippingMethodService, ICategoryService categoryService, IShoppingCartItemService shoppingCartItemService, IProductService productService)
+        public FilterService(ICampaignService campaignService, 
+            IShippingMethodService shippingMethodService, 
+            ICampaignFilterService campaignFilterService,
+            ICampaignUsageHistoryService campaignUsageHistoryService,
+            IOrderService orderService,
+             ICategoryService categoryService, 
+             IShoppingCartItemService shoppingCartItemService, 
+             IProductService productService)
         {
             this.campaignService = campaignService;
             this.shippingMethodService = shippingMethodService;
+            this.campaignFilterService = campaignFilterService;
+            this.campaignUsageHistoryService = campaignUsageHistoryService;
+            this.orderService = orderService;
             this.categoryService = categoryService;
             this.shoppingCartItemService = shoppingCartItemService;
             this.productService = productService;
@@ -37,8 +54,16 @@ namespace CampaignService.Services.FilterServices
         {
             var filteredCampaigns = await campaignService.GetAllActiveCampaigns();
 
+            filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
+            filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
+            filteredCampaigns = orderService.FilterRestrictedNthOrder(request.CustomerId, filteredCampaigns);
+            filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
+
+            filteredCampaigns = campaignService.FilterCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
+
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMail(request.Email, filteredCampaigns);
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerMailDomain(request.Email, filteredCampaigns);
+
             filteredCampaigns = campaignService.FilterCampaignsWithDeviceTypes(request.DeviceType.ToString(), filteredCampaigns);
             filteredCampaigns = campaignService.FilterCampaignsWithInstallmentCount(request.InstallmentCount, filteredCampaigns);
             filteredCampaigns = campaignService.FilterCampaignsWithPickUp(request.PickupInStore, filteredCampaigns);

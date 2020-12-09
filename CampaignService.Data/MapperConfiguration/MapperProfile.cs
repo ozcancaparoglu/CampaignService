@@ -13,7 +13,7 @@ namespace CampaignService.Data.MapperConfiguration
             CreateMap<CampaignService_Campaigns, CampaignModel>().MaxDepth(depth).ReverseMap();
             CreateMap<CampaignService_CampaignCouponCode, CampaignCouponCodeModel>().MaxDepth(depth).ReverseMap();
             CreateMap<CampaignService_CampaignCouponUsage, CampaignCouponUsageModel>().MaxDepth(depth).ReverseMap();
-            CreateMap<CampaignService_CampaignFilter, CampaignFilterModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<CampaignService_CampaignFilters, CampaignFilterModel>().MaxDepth(depth).ReverseMap();
             CreateMap<CampaignService_CampaignUsageHistory,CampaignUsageHistoryModel>().MaxDepth(depth).ReverseMap();
             CreateMap<Product, ProductModel>().MaxDepth(depth).ReverseMap();
             CreateMap<Product_Category_Mapping, ProductCategoryMappingModel>().MaxDepth(depth).ReverseMap();
@@ -22,6 +22,8 @@ namespace CampaignService.Data.MapperConfiguration
             CreateMap<ShoppingCartItem, ShoppingCartItemModel>().MaxDepth(depth).ReverseMap();
             CreateMap<GenericAttribute, GenericAttributeModel>().MaxDepth(depth).ReverseMap();
             CreateMap<ShippingMethod, ShippingMethodModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<Customer, CustomerModel>().MaxDepth(depth).ReverseMap();
+            CreateMap<Order, OrderModel>().MaxDepth(depth).ReverseMap();
         }
     }
 }
