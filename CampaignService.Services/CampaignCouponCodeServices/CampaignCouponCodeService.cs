@@ -7,7 +7,6 @@ using CampaignService.Logging;
 using CampaignService.Repositories;
 using CampaignService.UnitOfWorks;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CampaignService.Services.CampaignCouponCodeServices

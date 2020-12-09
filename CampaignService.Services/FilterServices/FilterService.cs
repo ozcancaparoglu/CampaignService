@@ -45,6 +45,7 @@ namespace CampaignService.Services.FilterServices
             filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
             filteredCampaigns = campaignFilterService.FilterCampaignsWithCampaignFilter(request.CustomerId, filteredCampaigns);
             filteredCampaigns = orderService.FilterRestrictedNthOrder(request.CustomerId, filteredCampaigns);
+            filteredCampaigns = campaignUsageHistoryService.FilterCampaignsWithUsageHistory(request.CustomerId, filteredCampaigns);
 
             filteredCampaigns = campaignService.FilterCampaignsWithCustomerRoleId(request.CustomerRoleIds.ToList(), filteredCampaigns);
 
