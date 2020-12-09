@@ -54,7 +54,9 @@ namespace CampaignService.Services.OrderServices
         {
             var customerOrderCount = GetCustomerOrderCount(customerId).ToString(); //TODO: yazacağınız algoritmaya uyayım.
 
-            return modelList.Where(x => x.RestrictedToCustomerNthOrder == null || x.RestrictedToCustomerNthOrder.Contains(customerOrderCount.ToString())).ToList();
+            return FilterPredication(modelList,
+                x => x.RestrictedToCustomerNthOrder == null,
+                x => x.RestrictedToCustomerNthOrder.Contains(customerOrderCount));
         }
 
         #endregion

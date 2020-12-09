@@ -20,5 +20,13 @@
         public static string Customer = "Customer";
         public static int CustomerCacheTime = 120;
 
+        /// <summary>
+        /// CouponCode join key with Campaign Id
+        /// </summary>
+        public static string CouponCode = "CouponCode";
+        public static int CouponCodeCacheTime = 120;
+
+
+
     }
 }

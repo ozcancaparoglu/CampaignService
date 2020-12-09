@@ -41,11 +41,13 @@ namespace CampaignService.Services.CustomerServices
             if (!redisCache.IsCached($"{CacheStatics.Customer}_{id}"))
             {
                 var entity = await customerRepo.GetByIdAsync(id);
-                await redisCache.SetAsync($"{CacheStatics.Customer}_{id}", entity, CacheStatics.CampaignFiltersCacheTime);
+
+                var model = autoMapper.MapObject<Customer, CustomerModel>(entity);
+
+                await redisCache.SetAsync($"{CacheStatics.Customer}_{id}", model, CacheStatics.CampaignFiltersCacheTime);
             }
 
-            return autoMapper.MapObject<Customer, CustomerModel>
-                (await redisCache.GetAsync<Customer>($"{CacheStatics.Customer}_{id}"));
+            return await redisCache.GetAsync<CustomerModel>($"{CacheStatics.Customer}_{id}");
         }
 
         #endregion

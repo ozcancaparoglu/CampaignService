@@ -56,12 +56,13 @@ namespace CampaignService.Services.CampaignFilterServices
             if (!redisCache.IsCached($"{CacheStatics.CampaignFilters}_{campaignId}"))
             {
                 var entityList = await campaignFilterRepo.FindAllAsync(x => x.IsActive == true && x.CampaignId == campaignId);
-                await redisCache.SetAsync($"{CacheStatics.CampaignFilters}_{campaignId}", entityList, CacheStatics.CampaignFiltersCacheTime);
+
+                var modelList = autoMapper.MapCollection<CampaignService_CampaignFilters, CampaignFilterModel>(entityList);
+                
+                await redisCache.SetAsync($"{CacheStatics.CampaignFilters}_{campaignId}", modelList, CacheStatics.CampaignFiltersCacheTime);
             }
 
-            return autoMapper.MapCollection<CampaignService_CampaignFilters, CampaignFilterModel>
-                (await redisCache.GetAsync<ICollection<CampaignService_CampaignFilters>>($"{CacheStatics.CampaignFilters}_{campaignId}"))
-                .ToList();
+            return await redisCache.GetAsync<ICollection<CampaignFilterModel>>($"{CacheStatics.CampaignFilters}_{campaignId}");
         }
 
         #endregion

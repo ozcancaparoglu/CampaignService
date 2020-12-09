@@ -42,13 +42,15 @@ namespace CampaignService.Services.CampaignServices
             if (!redisCache.IsCached(CacheStatics.AllActiveCampaigns))
             {
                 DateTime now = DateTime.UtcNow;
+
                 var entityList = await campaignRepo.FindAllAsync(x => x.IsActive == true && (x.StartDate <= now && x.EndDate >= now));
-                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, entityList, CacheStatics.AllActiveCampaignsCacheTime);
+                
+                var modelList = autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>(entityList);
+
+                await redisCache.SetAsync(CacheStatics.AllActiveCampaigns, modelList, CacheStatics.AllActiveCampaignsCacheTime);
             }
 
-            return autoMapper.MapCollection<CampaignService_Campaigns, CampaignModel>
-                (await redisCache.GetAsync<ICollection<CampaignService_Campaigns>>(CacheStatics.AllActiveCampaigns))
-                .ToList();
+            return await redisCache.GetAsync<ICollection<CampaignModel>>(CacheStatics.AllActiveCampaigns);
         }
 
         #endregion
