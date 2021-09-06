@@ -13,6 +13,11 @@
         IsEmpty = 8,
         IsNotEmpty = 9,
         HasNoValue = 10,
-        HasValue = 11
+        HasValue = 11,
+        Between = 12,
+        IsEqualToNotNullGuid = 13,
+        IsEqualToGuid = 14,
+        GreaterThan = 15,
+        GreaterThanOrEqual = 16,
     }
 }

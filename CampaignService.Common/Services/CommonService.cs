@@ -137,6 +137,41 @@ namespace CampaignService.Common.Services
                   Expression.PropertyOrField(x, field),
                   Expression.Constant(null, typeof(object)));
                     break;
+                case FilterOperatorEnum.Between:
+                    body = column == null
+               ? (Expression)Expression.Constant(true)
+                : Expression.And(Expression.LessThanOrEqual(Expression.PropertyOrField(x, field), 
+                Expression.Constant(Convert.ToDecimal(searchValue.ToString().Split(",")[1]), typeof(decimal))),
+                Expression.GreaterThanOrEqual(Expression.PropertyOrField(x, field), 
+                Expression.Constant(Convert.ToDecimal(searchValue.ToString().Split(",")[0]), typeof(decimal))));
+                    break;
+
+                case FilterOperatorEnum.IsEqualToNotNullGuid:
+                    body = column == null
+              ? (Expression)Expression.Constant(true)
+              : Expression.Equal(Expression.PropertyOrField(x, field), 
+              Expression.Constant(new Guid(searchValue.ToString()), typeof(Guid)));
+                    break;
+                case FilterOperatorEnum.IsEqualToGuid:
+                    body = column == null
+              ? (Expression)Expression.Constant(true)
+              : Expression.Equal(Expression.PropertyOrField(x, field), 
+              Expression.Constant(new Guid(searchValue.ToString()), typeof(Guid?)));
+                    break;
+                case FilterOperatorEnum.GreaterThan:
+                    body = column == null
+                ? (Expression)Expression.Constant(true)
+                : Expression.GreaterThan(
+                    Expression.PropertyOrField(x, field),
+                    Expression.Constant(searchValue));
+                    break;
+                case FilterOperatorEnum.GreaterThanOrEqual:
+                    body = column == null
+                ? (Expression)Expression.Constant(true)
+                : Expression.GreaterThanOrEqual(
+                    Expression.PropertyOrField(x, field),
+                    Expression.Constant(searchValue));
+                    break;
                 default:
                     break;
             }
